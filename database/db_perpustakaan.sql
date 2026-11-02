@@ -5,14 +5,14 @@
 -- ENGINE  : InnoDB dengan Foreign Key Constraint (RESTRICT & CASCADE)
 -- ==============================================================================
 
--- 1. Buat Database jika belum ada
+-- 1. Inisialisasi Database (Aman untuk phpMyAdmin & CLI)
 CREATE DATABASE IF NOT EXISTS `db_perpustakaan` 
 CHARACTER SET utf8mb4 
 COLLATE utf8mb4_unicode_ci;
 
 USE `db_perpustakaan`;
 
--- Matikan foreign key check sementara agar drop table bersih
+-- Matikan foreign key check sementara agar drop table bersih tanpa konflik constraint
 SET FOREIGN_KEY_CHECKS = 0;
 DROP TABLE IF EXISTS `peminjaman`;
 DROP TABLE IF EXISTS `anggota`;
@@ -43,7 +43,8 @@ CREATE TABLE `buku` (
     `tahun_terbit` YEAR NOT NULL,
     `kategori` VARCHAR(50) NOT NULL,
     `stok` INT NOT NULL DEFAULT 0,
-    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    KEY `idx_buku_judul` (`judul_buku`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ==============================================================================
@@ -57,7 +58,8 @@ CREATE TABLE `anggota` (
     `alamat` TEXT NOT NULL,
     `no_telepon` VARCHAR(20) NOT NULL,
     `tanggal_pendaftaran` DATE NOT NULL,
-    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    KEY `idx_anggota_nama` (`nama_lengkap`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ==============================================================================
@@ -76,6 +78,8 @@ CREATE TABLE `peminjaman` (
     `jumlah_pinjam` INT NOT NULL DEFAULT 1,
     `status` ENUM('Dipinjam', 'Dikembalikan') NOT NULL DEFAULT 'Dipinjam',
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    KEY `idx_peminjaman_status` (`status`),
+    KEY `idx_peminjaman_tgl_pinjam` (`tanggal_pinjam`),
     CONSTRAINT `fk_peminjaman_anggota` 
         FOREIGN KEY (`id_anggota`) REFERENCES `anggota` (`id_anggota`) 
         ON DELETE RESTRICT ON UPDATE CASCADE,
@@ -83,12 +87,6 @@ CREATE TABLE `peminjaman` (
         FOREIGN KEY (`id_buku`) REFERENCES `buku` (`id_buku`) 
         ON DELETE RESTRICT ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- Indeks Tambahan untuk Optimasi Query Laporan dan Pencarian
-CREATE INDEX `idx_peminjaman_status` ON `peminjaman` (`status`);
-CREATE INDEX `idx_peminjaman_tgl_pinjam` ON `peminjaman` (`tanggal_pinjam`);
-CREATE INDEX `idx_buku_judul` ON `buku` (`judul_buku`);
-CREATE INDEX `idx_anggota_nama` ON `anggota` (`nama_lengkap`);
 
 -- ==============================================================================
 -- 6. DUMMY DATA AWAL (SEEDING)
