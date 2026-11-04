@@ -1,13 +1,5 @@
 <?php
-/**
- * ==============================================================================
- * DASHBOARD UTAMA - NINEMART
- * ==============================================================================
- * Menampilkan pesan sambutan 'Sugeng Rawuh' pada kotak kuning dengan latar
- * belakang hijau terang persis seperti lembar soal UKK.
- * ==============================================================================
- */
-
+// Halaman dashboard utama
 require_once 'config/database.php';
 require_once 'config/auth.php';
 
@@ -15,7 +7,7 @@ $page_title = "Dashboard";
 require_once 'includes/header.php';
 ?>
 
-<!-- Kotak Ucapan Kuning Terang Sesuai Soal -->
+<!-- Kotak sambutan sesuai spesifikasi lembar soal -->
 <div class="greeting-box">
     <div class="greeting-title">SUGENG RAWUH ... |!!!!</div>
     <div class="greeting-text">SELAMAT DATANG DI SISTEM APLIKASI PENJUALAN ONLINE</div>

@@ -1,12 +1,5 @@
 <?php
-/**
- * ==============================================================================
- * MODUL DATA KELOMPOK - NINEMART
- * ==============================================================================
- * CRUD master kelompok barang (KLP-1, KLP-2, KLP-3).
- * ==============================================================================
- */
-
+// Pengelolaan master data kelompok barang
 require_once 'config/database.php';
 require_once 'config/auth.php';
 
@@ -14,7 +7,7 @@ $page_title = "Data Kelompok";
 $sukses = '';
 $error  = '';
 
-// 1. Tambah Kelompok (POST)
+// Proses tambah kelompok baru
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['tambah_kelompok'])) {
     $kode = trim($_POST['kode_kelompok'] ?? '');
     $nama = trim($_POST['nama_kelompok'] ?? '');
@@ -23,6 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['tambah_kelompok'])) {
         $error = "Semua kolom data kelompok wajib diisi!";
     } else {
         try {
+            // Periksa apakah kode kelompok sudah ada
             $stmtCek = $pdo->prepare("SELECT id FROM tblkelompok WHERE kode_kelompok = :kd LIMIT 1");
             $stmtCek->execute([':kd' => $kode]);
             if ($stmtCek->fetch()) {
@@ -38,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['tambah_kelompok'])) {
     }
 }
 
-// 2. Edit Kelompok (POST)
+// Proses pembaruan data kelompok
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_kelompok'])) {
     $id   = (int)($_POST['id'] ?? 0);
     $kode = trim($_POST['kode_kelompok'] ?? '');
@@ -57,17 +51,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_kelompok'])) {
     }
 }
 
-// 3. Hapus Kelompok (GET)
+// Proses hapus data kelompok
 if (isset($_GET['aksi']) && $_GET['aksi'] === 'hapus') {
     $idHapus = (int)($_GET['id'] ?? 0);
     try {
-        // Ambil kode kelompok
+        // Ambil data kelompok yang akan dihapus
         $stmtCek = $pdo->prepare("SELECT kode_kelompok FROM tblkelompok WHERE id = :id");
         $stmtCek->execute([':id' => $idHapus]);
         $klp = $stmtCek->fetch();
 
         if ($klp) {
-            // Cek apakah digunakan di tabel barang
+            // Cek apakah kelompok masih digunakan pada tabel barang
             $stmtBarang = $pdo->prepare("SELECT COUNT(*) FROM tblbarang WHERE kode_kelompok = :kd");
             $stmtBarang->execute([':kd' => $klp['kode_kelompok']]);
             $usedCount = $stmtBarang->fetchColumn();
@@ -85,7 +79,7 @@ if (isset($_GET['aksi']) && $_GET['aksi'] === 'hapus') {
     }
 }
 
-// 4. Ambil Daftar Kelompok
+// Ambil daftar kelompok dari database
 $stmt = $pdo->query("SELECT * FROM tblkelompok ORDER BY id ASC");
 $listKelompok = $stmt->fetchAll();
 
@@ -98,7 +92,7 @@ require_once 'includes/header.php';
     <div class="alert-toast alert-danger"><?= escape($error) ?></div>
 <?php endif; ?>
 
-<!-- Tabel Data Kelompok Sesuai Screenshot -->
+<!-- Tabel daftar kelompok barang -->
 <div class="table-card">
     <div class="table-card-header">
         <h4 class="table-card-title">DATA KELOMPOK</h4>
@@ -149,7 +143,7 @@ require_once 'includes/header.php';
     </table>
 </div>
 
-<!-- Modal Tambah Kelompok -->
+<!-- Modal form tambah kelompok -->
 <div class="modal-overlay" id="modalTambahKelompok">
     <div class="modal-box">
         <div class="modal-header">
@@ -176,7 +170,7 @@ require_once 'includes/header.php';
     </div>
 </div>
 
-<!-- Modal Edit Kelompok -->
+<!-- Modal form edit kelompok -->
 <div class="modal-overlay" id="modalEditKelompok">
     <div class="modal-box">
         <div class="modal-header">
@@ -205,6 +199,7 @@ require_once 'includes/header.php';
 </div>
 
 <script>
+// Mengisi form edit saat tombol pensil ditekan
 function editKelompok(id, kode, nama) {
     document.getElementById('edit_id').value = id;
     document.getElementById('edit_kode').value = kode;

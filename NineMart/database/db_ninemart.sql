@@ -1,8 +1,5 @@
--- ==============================================================================
--- DATABASE: db_ninemart
--- PROYEK  : Aplikasi Penjualan Online NineMart - SMK Negeri 9 Semarang
--- STANDAR : Soal Tryout UKK 2026 / 2024 Klaster Pemrograman Web
--- ==============================================================================
+-- Skema Database NineMart - SMK Negeri 9 Semarang
+-- Persiapan Tryout UKK Klaster Pemrograman Web
 
 CREATE DATABASE IF NOT EXISTS `db_ninemart` 
 CHARACTER SET utf8mb4 
@@ -17,27 +14,21 @@ DROP TABLE IF EXISTS `tblkelompok`;
 DROP TABLE IF EXISTS `tblpengguna`;
 SET FOREIGN_KEY_CHECKS = 1;
 
--- ------------------------------------------------------------------------------
--- 1. TABEL: tblpengguna
--- ------------------------------------------------------------------------------
+-- 1. Tabel master pengguna
 CREATE TABLE `tblpengguna` (
     `id` INT(11) AUTO_INCREMENT PRIMARY KEY,
     `user` VARCHAR(15) NOT NULL UNIQUE,
     `password` TEXT NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- ------------------------------------------------------------------------------
--- 2. TABEL: tblkelompok
--- ------------------------------------------------------------------------------
+-- 2. Tabel master kelompok barang
 CREATE TABLE `tblkelompok` (
     `id` INT(11) AUTO_INCREMENT PRIMARY KEY,
     `kode_kelompok` VARCHAR(15) NOT NULL UNIQUE,
     `nama_kelompok` VARCHAR(35) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- ------------------------------------------------------------------------------
--- 3. TABEL: tblpemasok
--- ------------------------------------------------------------------------------
+-- 3. Tabel master pemasok
 CREATE TABLE `tblpemasok` (
     `id` INT(11) AUTO_INCREMENT PRIMARY KEY,
     `kode_pemasok` VARCHAR(15) NOT NULL UNIQUE,
@@ -45,9 +36,7 @@ CREATE TABLE `tblpemasok` (
     `alamat` TEXT NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- ------------------------------------------------------------------------------
--- 4. TABEL: tblbarang
--- ------------------------------------------------------------------------------
+-- 4. Tabel master barang
 CREATE TABLE `tblbarang` (
     `id` INT(11) AUTO_INCREMENT PRIMARY KEY,
     `kode_barang` VARCHAR(15) NOT NULL UNIQUE,
@@ -59,25 +48,19 @@ CREATE TABLE `tblbarang` (
     KEY `idx_kode_kelompok` (`kode_kelompok`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- ==============================================================================
--- DUMMY SEED DATA (SESUAI DOKUMEN INSTRUMEN SOAL TRYOUT UKK)
--- ==============================================================================
-
--- Data Pengguna Default
--- Password terenkripsi dengan password_hash (default: admin, user, adi)
--- Logika autentikasi mendukung verifikasi hash dan kompatibilitas plain text
+-- Data awal pengguna (default: admin, user, adi)
 INSERT INTO `tblpengguna` (`id`, `user`, `password`) VALUES
-(1, 'admin', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi'), -- password: password (atau admin)
+(1, 'admin', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi'),
 (2, 'user', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi'),
 (3, 'adi', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi');
 
--- Data Kelompok Barang
+-- Data awal kelompok barang
 INSERT INTO `tblkelompok` (`id`, `kode_kelompok`, `nama_kelompok`) VALUES
 (1, 'KLP-1', 'MAKANAN'),
 (2, 'KLP-2', 'BARANG HARIAN'),
 (3, 'KLP-3', 'MNUMAN');
 
--- Data Pemasok
+-- Data awal pemasok
 INSERT INTO `tblpemasok` (`id`, `kode_pemasok`, `nama_pemasok`, `alamat`) VALUES
 (1, 'PMS-1', 'Toko Jaya Makmur', 'PASAR SAMPANGAN'),
 (2, 'PMS-2', 'Toko Maju Mundur', 'PASAR DARGO'),
@@ -85,7 +68,7 @@ INSERT INTO `tblpemasok` (`id`, `kode_pemasok`, `nama_pemasok`, `alamat`) VALUES
 (4, 'PMS-4', 'Toko Maju Selamat', 'PASAR BULU'),
 (5, 'PMS-5', 'Toko Maju Sejahtera', 'PASAR PETERONGAN');
 
--- Data Barang
+-- Data awal barang
 INSERT INTO `tblbarang` (`id`, `kode_barang`, `nama_barang`, `kode_kelompok`, `harga_beli`, `harga_jual`, `stock`) VALUES
 (1, 'BRG-1', 'SABUN', 'KLP-2', 15000, 17500, 50),
 (2, 'BRG-2', 'SAMPO', 'KLP-2', 32500, 40000, 100),

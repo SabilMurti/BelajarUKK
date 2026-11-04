@@ -1,17 +1,9 @@
 <?php
-/**
- * ==============================================================================
- * MODUL LOGIN SISTEM - NINEMART
- * ==============================================================================
- * Menampilkan antarmuka otentikasi dengan background Lawang Sewu dan kartu
- * login persis seperti spesifikasi lembar soal UKK.
- * ==============================================================================
- */
-
+// Halaman login pengguna
 session_start();
 require_once 'config/database.php';
 
-// Jika sudah login, langsung alihkan ke Dashboard
+// Jika sudah login, langsung diarahkan ke halaman utama
 if (isset($_SESSION['user'])) {
     header("Location: index.php");
     exit;
@@ -20,6 +12,7 @@ if (isset($_SESSION['user'])) {
 $error = '';
 $pesan = '';
 
+// Menangkap notifikasi dari parameter URL
 if (isset($_GET['pesan'])) {
     if ($_GET['pesan'] === 'logout') {
         $pesan = "Anda telah berhasil logout dari sistem.";
@@ -28,6 +21,7 @@ if (isset($_GET['pesan'])) {
     }
 }
 
+// Proses form login saat tombol ditekan
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $username = trim($_POST['user'] ?? '');
     $password = trim($_POST['password'] ?? '');
@@ -35,11 +29,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (empty($username) || empty($password)) {
         $error = "Username dan Password wajib diisi!";
     } else {
+        // Cari data pengguna di database
         $stmt = $pdo->prepare("SELECT * FROM tblpengguna WHERE user = :user LIMIT 1");
         $stmt->execute([':user' => $username]);
         $user = $stmt->fetch();
 
-        // Validasi kata sandi: mendukung password_verify (Bcrypt) dan plain-text fallback standar UKK
+        // Cek kecocokan password (mendukung hash password dan teks biasa)
         $password_valid = false;
         if ($user) {
             if (password_verify($password, $user['password']) || $password === $user['password']) {
@@ -47,6 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
 
+        // Jika login berhasil, buat sesi login
         if ($password_valid) {
             session_regenerate_id(true);
             $_SESSION['user']    = $user['user'];
@@ -71,17 +67,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body class="login-body">
 
     <div class="login-card">
-        <!-- Top Mini Banner -->
+        <!-- Banner atas kartu login -->
         <div class="login-card-banner">
             <img src="assets/img/header-banner.png" alt="Header Banner Nine Mart">
         </div>
 
-        <!-- Header Card Bar -->
+        <!-- Judul kartu login -->
         <div class="login-card-header">
             LOGIN SISTEM
         </div>
 
-        <!-- Form Body -->
+        <!-- Form isian username dan password -->
         <div class="login-card-body">
             <div class="login-key-wrap">
                 <img src="assets/img/key-icon.png" alt="Key Icon">
@@ -126,7 +122,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
         </div>
 
-        <!-- Footer Card Bar -->
+        <!-- Footer kartu login -->
         <div class="login-card-footer">
             NINE MART TOKO NYA SMKN 9 SEMARANG | 2024
         </div>

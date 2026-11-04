@@ -1,12 +1,5 @@
 <?php
-/**
- * ==============================================================================
- * MODUL DATA PEMASOK - NINEMART
- * ==============================================================================
- * CRUD data master pemasok (PMS-1 s/d PMS-5).
- * ==============================================================================
- */
-
+// Pengelolaan master data pemasok
 require_once 'config/database.php';
 require_once 'config/auth.php';
 
@@ -14,7 +7,7 @@ $page_title = "Data Pemasok";
 $sukses = '';
 $error  = '';
 
-// 1. Tambah Pemasok (POST)
+// Proses penambahan pemasok baru
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['tambah_pemasok'])) {
     $kode   = trim($_POST['kode_pemasok'] ?? '');
     $nama   = trim($_POST['nama_pemasok'] ?? '');
@@ -24,6 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['tambah_pemasok'])) {
         $error = "Semua kolom pemasok wajib diisi!";
     } else {
         try {
+            // Cek apakah kode pemasok sudah ada
             $stmtCek = $pdo->prepare("SELECT id FROM tblpemasok WHERE kode_pemasok = :kd LIMIT 1");
             $stmtCek->execute([':kd' => $kode]);
             if ($stmtCek->fetch()) {
@@ -39,7 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['tambah_pemasok'])) {
     }
 }
 
-// 2. Edit Pemasok (POST)
+// Proses pembaruan data pemasok
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_pemasok'])) {
     $id     = (int)($_POST['id'] ?? 0);
     $kode   = trim($_POST['kode_pemasok'] ?? '');
@@ -59,7 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_pemasok'])) {
     }
 }
 
-// 3. Hapus Pemasok (GET)
+// Proses penghapusan data pemasok
 if (isset($_GET['aksi']) && $_GET['aksi'] === 'hapus') {
     $idHapus = (int)($_GET['id'] ?? 0);
     try {
@@ -71,7 +65,7 @@ if (isset($_GET['aksi']) && $_GET['aksi'] === 'hapus') {
     }
 }
 
-// 4. Ambil Daftar Pemasok
+// Ambil daftar seluruh pemasok dari database
 $stmt = $pdo->query("SELECT * FROM tblpemasok ORDER BY id ASC");
 $listPemasok = $stmt->fetchAll();
 
@@ -84,7 +78,7 @@ require_once 'includes/header.php';
     <div class="alert-toast alert-danger"><?= escape($error) ?></div>
 <?php endif; ?>
 
-<!-- Tabel Data Pemasok Sesuai Screenshot Lembar Uji -->
+<!-- Tabel daftar pemasok -->
 <div class="table-card">
     <div class="table-card-header">
         <h4 class="table-card-title">DATA PEMASOK</h4>
@@ -137,7 +131,7 @@ require_once 'includes/header.php';
     </table>
 </div>
 
-<!-- Modal Tambah Pemasok -->
+<!-- Modal form tambah pemasok -->
 <div class="modal-overlay" id="modalTambahPemasok">
     <div class="modal-box">
         <div class="modal-header">
@@ -168,7 +162,7 @@ require_once 'includes/header.php';
     </div>
 </div>
 
-<!-- Modal Edit Pemasok -->
+<!-- Modal form edit pemasok -->
 <div class="modal-overlay" id="modalEditPemasok">
     <div class="modal-box">
         <div class="modal-header">
@@ -201,6 +195,7 @@ require_once 'includes/header.php';
 </div>
 
 <script>
+// Mengisi data pemasok ke modal edit
 function editPemasok(id, kode, nama, alamat) {
     document.getElementById('edit_pemasok_id').value = id;
     document.getElementById('edit_pemasok_kode').value = kode;

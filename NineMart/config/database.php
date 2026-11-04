@@ -1,18 +1,10 @@
 <?php
-/**
- * ==============================================================================
- * MODUL KONEKSI DATABASE (PHP PDO) - NINEMART
- * ==============================================================================
- * Proyek  : Aplikasi Penjualan Online NineMart - SMK Negeri 9 Semarang
- * Standar : Tryout UKK RPL / PPLG Klaster Pemrograman Web
- * ==============================================================================
- */
-
+// Koneksi database menggunakan PDO
 $db_host = '127.0.0.1';
 $db_port = '3306';
 $db_name = 'db_ninemart';
 $db_user = 'root';
-$db_pass = ''; // Default XAMPP
+$db_pass = ''; // Password default XAMPP
 
 try {
     $dsn = "mysql:host={$db_host};port={$db_port};dbname={$db_name};charset=utf8mb4";
@@ -33,9 +25,7 @@ try {
         . "</div>");
 }
 
-/**
- * Sanitasi string output untuk proteksi Cross-Site Scripting (XSS).
- */
+// Fungsi pencegah XSS saat menampilkan data ke halaman web
 function escape($data) {
     return htmlspecialchars((string)$data, ENT_QUOTES, 'UTF-8');
 }

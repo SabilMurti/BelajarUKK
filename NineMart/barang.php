@@ -1,12 +1,5 @@
 <?php
-/**
- * ==============================================================================
- * MODUL DATA BARANG - NINEMART
- * ==============================================================================
- * CRUD data master barang (BRG-1, BRG-2, BRG-3, dst).
- * ==============================================================================
- */
-
+// Pengelolaan master data barang
 require_once 'config/database.php';
 require_once 'config/auth.php';
 
@@ -14,11 +7,11 @@ $page_title = "Data Barang";
 $sukses = '';
 $error  = '';
 
-// 1. Ambil List Kelompok untuk Dropdown Tambah/Edit
+// Ambil daftar kelompok untuk pilihan dropdown form
 $stmtKelompok = $pdo->query("SELECT kode_kelompok, nama_kelompok FROM tblkelompok ORDER BY kode_kelompok ASC");
 $listKelompok = $stmtKelompok->fetchAll();
 
-// 2. Tambah Barang (POST)
+// Proses tambah data barang
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['tambah_barang'])) {
     $kode_barang   = trim($_POST['kode_barang'] ?? '');
     $nama_barang   = trim($_POST['nama_barang'] ?? '');
@@ -33,6 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['tambah_barang'])) {
         $error = "Harga dan stok tidak boleh bernilai negatif!";
     } else {
         try {
+            // Periksa apakah kode barang sudah terdaftar
             $stmtCek = $pdo->prepare("SELECT id FROM tblbarang WHERE kode_barang = :kd LIMIT 1");
             $stmtCek->execute([':kd' => $kode_barang]);
             if ($stmtCek->fetch()) {
@@ -58,7 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['tambah_barang'])) {
     }
 }
 
-// 3. Edit Barang (POST)
+// Proses pembaruan data barang
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_barang'])) {
     $id            = (int)($_POST['id'] ?? 0);
     $kode_barang   = trim($_POST['kode_barang'] ?? '');
@@ -95,7 +89,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_barang'])) {
     }
 }
 
-// 4. Hapus Barang (GET)
+// Proses penghapusan data barang
 if (isset($_GET['aksi']) && $_GET['aksi'] === 'hapus') {
     $idHapus = (int)($_GET['id'] ?? 0);
     try {
@@ -107,7 +101,7 @@ if (isset($_GET['aksi']) && $_GET['aksi'] === 'hapus') {
     }
 }
 
-// 5. Ambil Daftar Barang
+// Ambil seluruh data barang dari database
 $stmt = $pdo->query("SELECT * FROM tblbarang ORDER BY id ASC");
 $listBarang = $stmt->fetchAll();
 
@@ -120,7 +114,7 @@ require_once 'includes/header.php';
     <div class="alert-toast alert-danger"><?= escape($error) ?></div>
 <?php endif; ?>
 
-<!-- Tabel Data Barang Sesuai Screenshot Lembar Uji -->
+<!-- Tabel daftar barang -->
 <div class="table-card">
     <div class="table-card-header">
         <h4 class="table-card-title">DATA BARANG</h4>
@@ -177,7 +171,7 @@ require_once 'includes/header.php';
     </table>
 </div>
 
-<!-- Modal Tambah Barang -->
+<!-- Modal form tambah barang -->
 <div class="modal-overlay" id="modalTambahBarang">
     <div class="modal-box">
         <div class="modal-header">
@@ -227,7 +221,7 @@ require_once 'includes/header.php';
     </div>
 </div>
 
-<!-- Modal Edit Barang -->
+<!-- Modal form edit barang -->
 <div class="modal-overlay" id="modalEditBarang">
     <div class="modal-box">
         <div class="modal-header">
@@ -278,6 +272,7 @@ require_once 'includes/header.php';
 </div>
 
 <script>
+// Mengisi data barang ke modal edit saat tombol pensil ditekan
 function editBarang(id, kode, nama, kelompok, hb, hj, stock) {
     document.getElementById('edit_barang_id').value = id;
     document.getElementById('edit_barang_kode').value = kode;

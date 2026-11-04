@@ -1,8 +1,4 @@
-/* ==============================================================================
-   NINEMART - CSS DESIGN SYSTEM
-   Standar Tryout UKK RPL / PPLG Klaster Pemrograman Web
-   Sesuai 100% dengan Screenshot Lembar Uji
-   ============================================================================== */
+/* Desain antarmuka NineMart sesuai spesifikasi lembar soal UKK */
 
 *, *::before, *::after {
     box-sizing: border-box;
@@ -16,9 +12,7 @@ body {
     color: #000000;
 }
 
-/* ------------------------------------------------------------------------------
-   APP CONTAINER (WINDOW)
-   ------------------------------------------------------------------------------ */
+/* Wadah utama aplikasi */
 .app-container {
     width: 919px;
     max-width: 100%;
@@ -29,9 +23,7 @@ body {
     overflow: hidden;
 }
 
-/* ------------------------------------------------------------------------------
-   HEADER BANNER
-   ------------------------------------------------------------------------------ */
+/* Banner header */
 .header-banner {
     width: 100%;
     display: block;
@@ -44,9 +36,7 @@ body {
     display: block;
 }
 
-/* ------------------------------------------------------------------------------
-   NAVBAR MENU
-   ------------------------------------------------------------------------------ */
+/* Menu navigasi */
 .main-navbar {
     background: linear-gradient(180deg, #6882be 0%, #546fa9 100%);
     border-top: 1px solid #7d96cc;
@@ -98,7 +88,7 @@ body {
     opacity: 0.85;
 }
 
-/* Dropdown Menu */
+/* Menu dropdown */
 .dropdown-menu {
     position: absolute;
     top: 100%;
@@ -138,11 +128,9 @@ body {
     color: #1a73e8;
 }
 
-/* ------------------------------------------------------------------------------
-   CONTENT BODY (BRIGHT GREEN)
-   ------------------------------------------------------------------------------ */
+/* Latar belakang konten (warna hijau terang sesuai soal) */
 .content-body {
-    background-color: #00ff00; /* Neon Lime Green persis sesuai lembar soal */
+    background-color: #00ff00;
     min-height: 420px;
     padding: 30px 25px;
     display: flex;
@@ -151,9 +139,9 @@ body {
     justify-content: flex-start;
 }
 
-/* Dashboard Greeting Box */
+/* Kotak sambutan dashboard (kuning) */
 .greeting-box {
-    background-color: #ffff00; /* Bright Yellow */
+    background-color: #ffff00;
     width: 100%;
     max-width: 860px;
     padding: 40px 20px;
@@ -182,9 +170,7 @@ body {
     margin-top: 18px;
 }
 
-/* ------------------------------------------------------------------------------
-   TABLE CARD (DATA PENGGUNA, BARANG, PEMASOK, KELOMPOK)
-   ------------------------------------------------------------------------------ */
+/* Kartu tabel data */
 .table-card {
     background-color: #ffffff;
     width: 100%;
@@ -233,7 +219,7 @@ body {
     display: block;
 }
 
-/* Data Table */
+/* Gaya tabel data */
 .data-table {
     width: 100%;
     border-collapse: collapse;
@@ -250,7 +236,7 @@ body {
 }
 
 .data-table th.col-aksi {
-    color: #0000ff; /* Header Aksi warna biru persis di lembar soal */
+    color: #0000ff; /* Header Aksi warna biru sesuai soal */
     text-align: center;
     width: 90px;
 }
@@ -281,7 +267,7 @@ body {
     white-space: nowrap;
 }
 
-/* Action Icons */
+/* Tombol aksi (edit & hapus) */
 .action-btn {
     background: transparent;
     border: none;
@@ -302,9 +288,7 @@ body {
     display: block;
 }
 
-/* ------------------------------------------------------------------------------
-   UBAH PASSWORD FORM
-   ------------------------------------------------------------------------------ */
+/* Form ubah password */
 .form-card-container {
     width: 100%;
     max-width: 860px;
@@ -364,9 +348,7 @@ body {
     background: #bcbcbc;
 }
 
-/* ------------------------------------------------------------------------------
-   FOOTER BAR
-   ------------------------------------------------------------------------------ */
+/* Bagian footer */
 .app-footer {
     background-color: #ffffff;
     border-top: 1px solid #b8b8b8;
@@ -378,9 +360,7 @@ body {
     letter-spacing: 0.5px;
 }
 
-/* ------------------------------------------------------------------------------
-   LOGIN SCREEN
-   ------------------------------------------------------------------------------ */
+/* Halaman login */
 .login-body {
     min-height: 100vh;
     margin: 0;
@@ -499,9 +479,7 @@ body {
     letter-spacing: 0.5px;
 }
 
-/* ------------------------------------------------------------------------------
-   MODAL POPUP FOR CRUD (TAMBAH / EDIT)
-   ------------------------------------------------------------------------------ */
+/* Jendela modal tambah & edit */
 .modal-overlay {
     position: fixed;
     top: 0;
@@ -613,7 +591,7 @@ body {
     cursor: pointer;
 }
 
-/* Alert Notification */
+/* Notifikasi alert */
 .alert-toast {
     width: 100%;
     max-width: 860px;

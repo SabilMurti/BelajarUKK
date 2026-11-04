@@ -1,9 +1,5 @@
 <?php
-/**
- * ==============================================================================
- * HEADER & NAVIGATION TEMPLATE - NINEMART
- * ==============================================================================
- */
+// Template header dan navigasi NineMart
 if (!defined('APP_INIT')) {
     define('APP_INIT', true);
 }
@@ -21,12 +17,12 @@ $current_page = basename($_SERVER['PHP_SELF']);
 
 <div class="app-container">
 
-    <!-- Header Banner Gambar (Termasuk Garis Kuning Atas/Bawah) -->
+    <!-- Banner header -->
     <div class="header-banner">
         <img src="assets/img/header-banner.png" alt="Header Banner Nine Mart SMK Negeri 9 Semarang">
     </div>
 
-    <!-- Main Navigation Bar -->
+    <!-- Menu navigasi -->
     <nav class="main-navbar">
         <ul class="nav-list">
             <li class="nav-item <?= ($current_page === 'index.php') ? 'active' : '' ?>">
@@ -60,5 +56,5 @@ $current_page = basename($_SERVER['PHP_SELF']);
         </ul>
     </nav>
 
-    <!-- Main Green Content Body -->
+    <!-- Konten halaman -->
     <div class="content-body">

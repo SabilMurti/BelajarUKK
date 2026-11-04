@@ -1,12 +1,5 @@
 <?php
-/**
- * ==============================================================================
- * MODUL DATA PENGGUNA - NINEMART
- * ==============================================================================
- * Menampilkan tabel master pengguna dan pengelolaan data pengguna.
- * ==============================================================================
- */
-
+// Pengelolaan master data pengguna
 require_once 'config/database.php';
 require_once 'config/auth.php';
 
@@ -14,7 +7,7 @@ $page_title = "Data Pengguna";
 $sukses = '';
 $error  = '';
 
-// 1. Proses Tambah Pengguna (POST)
+// Proses penambahan pengguna baru
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['tambah_pengguna'])) {
     $username = trim($_POST['user'] ?? '');
     $password = trim($_POST['password'] ?? '');
@@ -25,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['tambah_pengguna'])) {
         $error = "Username maksimal 15 karakter!";
     } else {
         try {
-            // Cek apakah username sudah ada
+            // Cek apakah username sudah dipakai
             $stmtCek = $pdo->prepare("SELECT id FROM tblpengguna WHERE user = :user LIMIT 1");
             $stmtCek->execute([':user' => $username]);
             if ($stmtCek->fetch()) {
@@ -45,11 +38,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['tambah_pengguna'])) {
     }
 }
 
-// 2. Proses Hapus Pengguna (GET)
+// Proses penghapusan data pengguna
 if (isset($_GET['aksi']) && $_GET['aksi'] === 'hapus') {
     $idHapus = (int)($_GET['id'] ?? 0);
 
-    // Mencegah menghapus akun sendiri yang sedang aktif
+    // Mencegah akun yang sedang login dihapus sendiri
     if ($idHapus === (int)$_SESSION['user_id']) {
         $error = "Anda tidak dapat menghapus akun yang sedang Anda gunakan!";
     } else {
@@ -63,7 +56,7 @@ if (isset($_GET['aksi']) && $_GET['aksi'] === 'hapus') {
     }
 }
 
-// 3. Ambil Seluruh Data Pengguna
+// Ambil seluruh daftar pengguna dari database
 $stmt = $pdo->query("SELECT id, user FROM tblpengguna ORDER BY id ASC");
 $listPengguna = $stmt->fetchAll();
 
@@ -76,7 +69,7 @@ require_once 'includes/header.php';
     <div class="alert-toast alert-danger"><?= escape($error) ?></div>
 <?php endif; ?>
 
-<!-- Tabel Data Pengguna Sesuai Screenshot -->
+<!-- Tabel daftar pengguna -->
 <div class="table-card">
     <div class="table-card-header">
         <h4 class="table-card-title">DATA PENGGUNA</h4>
@@ -120,7 +113,7 @@ require_once 'includes/header.php';
     </table>
 </div>
 
-<!-- Modal Tambah Pengguna -->
+<!-- Modal tambah pengguna -->
 <div class="modal-overlay" id="modalTambahPengguna">
     <div class="modal-box">
         <div class="modal-header">

@@ -1,12 +1,5 @@
 <?php
-/**
- * ==============================================================================
- * MODUL UBAH PASSWORD - NINEMART
- * ==============================================================================
- * Form perubahan kata sandi sesuai antarmuka lembar soal UKK.
- * ==============================================================================
- */
-
+// Modul pergantian kata sandi pengguna
 require_once 'config/database.php';
 require_once 'config/auth.php';
 
@@ -14,6 +7,7 @@ $page_title = "Ubah Password";
 $sukses = '';
 $error  = '';
 
+// Proses ubah password saat form dikirim
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $password_lama = trim($_POST['password_lama'] ?? '');
     $password_baru = trim($_POST['password_baru'] ?? '');
@@ -23,12 +17,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } elseif (strlen($password_baru) > 10) {
         $error = "Password baru maksimal 10 karakter!";
     } else {
-        // Ambil data user yang sedang login
+        // Ambil data akun yang sedang aktif dari database
         $stmt = $pdo->prepare("SELECT * FROM tblpengguna WHERE id = :id LIMIT 1");
         $stmt->execute([':id' => $_SESSION['user_id']]);
         $currentUser = $stmt->fetch();
 
         if ($currentUser) {
+            // Validasi apakah password lama sesuai
             $lamaValid = false;
             if (password_verify($password_lama, $currentUser['password']) || $password_lama === $currentUser['password']) {
                 $lamaValid = true;
@@ -37,6 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (!$lamaValid) {
                 $error = "Password lama yang Anda masukkan tidak sesuai!";
             } else {
+                // Simpan password baru terenkripsi
                 $hashBaru = password_hash($password_baru, PASSWORD_DEFAULT);
                 $stmtUpdate = $pdo->prepare("UPDATE tblpengguna SET password = :pwd WHERE id = :id");
                 $stmtUpdate->execute([
@@ -60,7 +56,7 @@ require_once 'includes/header.php';
     <div class="alert-toast alert-danger"><?= escape($error) ?></div>
 <?php endif; ?>
 
-<!-- Form Ubah Password Sesuai Screenshot Lembar Soal -->
+<!-- Form ubah kata sandi -->
 <div class="form-card-container">
     <form action="ubah_password.php" method="POST">
         <table class="form-table">

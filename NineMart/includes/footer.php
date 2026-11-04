@@ -1,14 +1,14 @@
-    </div><!-- /.content-body -->
+    </div>
 
-    <!-- Footer Bar -->
+    <!-- Bagian footer -->
     <footer class="app-footer">
         | APLIKASI PENJUALAN ONLINE | NINE MART | SMK NEGERI 9 SEMARANG - 2024 |
     </footer>
 
-</div><!-- /.app-container -->
+</div>
 
 <script>
-// Modal Handler Utility
+// Fungsi untuk membuka jendela modal
 function openModal(modalId) {
     var modal = document.getElementById(modalId);
     if (modal) {
@@ -16,6 +16,7 @@ function openModal(modalId) {
     }
 }
 
+// Fungsi untuk menutup jendela modal
 function closeModal(modalId) {
     var modal = document.getElementById(modalId);
     if (modal) {
@@ -23,7 +24,7 @@ function closeModal(modalId) {
     }
 }
 
-// Close modal when clicking outside box
+// Menutup modal jika area di luar kotak diklik
 window.addEventListener('click', function(e) {
     if (e.target.classList.contains('modal-overlay')) {
         e.target.classList.remove('active');
