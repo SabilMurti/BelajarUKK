@@ -1,0 +1,15 @@
+# Operating System
+.DS_Store
+Thumbs.db
+
+# IDE & Editors
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Server & Application Logs
+*.log
+
+# Composer & Dependencies
+vendor/

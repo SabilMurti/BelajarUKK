@@ -1,164 +1,160 @@
 <?php
 /**
  * ==============================================================================
- * PORTAL UTAMA APLIKASI PERPUSTAKAAN UKK PPLG
+ * PORTAL UTAMA: BELAJAR UKK PPLG / RPL
  * ==============================================================================
- * Halaman landing page untuk memilih versi tampilan yang ingin diuji / dipelajari:
- * 1. Versi Polos (Semantic HTML5 & 1 berkas CSS murni)
- * 2. Versi Bootstrap 5 (CDN Framework Modern)
- * Dilengkapi dengan pengecekan koneksi database secara real-time.
+ * Hub utama untuk mengakses seluruh modul latihan dan persiapan Uji Kompetensi
+ * Keahlian (UKK) Rekayasa Perangkat Lunak / PPLG.
  * ==============================================================================
  */
 
-// Cek koneksi ke database db_perpustakaan
-$db_connected = false;
-$db_error = '';
-$total_buku = 0;
-$total_anggota = 0;
-$total_pinjam = 0;
-
-try {
-    $dsn = "mysql:host=127.0.0.1;port=3306;dbname=db_perpustakaan;charset=utf8mb4";
-    $pdo = new PDO($dsn, 'root', '', [
-        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-        PDO::ATTR_TIMEOUT => 2
-    ]);
-    $db_connected = true;
-
-    // Ambil ringkasan cepat
-    $total_buku = $pdo->query("SELECT COUNT(*) FROM buku")->fetchColumn();
-    $total_anggota = $pdo->query("SELECT COUNT(*) FROM anggota")->fetchColumn();
-    $total_pinjam = $pdo->query("SELECT COUNT(*) FROM peminjaman")->fetchColumn();
-
-} catch (Exception $e) {
-    $db_connected = false;
-    $db_error = $e->getMessage();
-}
+$modules = [
+    [
+        'id'          => 'perpus',
+        'title'       => 'Aplikasi Manajemen Perpustakaan',
+        'badge'       => 'Modul 1 • Selesai & Teruji',
+        'badge_class' => 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/30',
+        'description' => 'Sistem sirkulasi peminjaman, pengembalian otomatis, proteksi stok atomik (ACID Transaction), dan laporan cetak resmi. Dilengkapi dual versi (Vanilla CSS & Bootstrap 5.3 CDN).',
+        'tech'        => ['PHP Native (PDO)', 'MySQL / MariaDB', 'Bootstrap 5.3', 'Pure CSS'],
+        'link'        => 'perpus/index.php',
+        'status'      => 'ready',
+        'icon'        => 'bi-book-half'
+    ],
+    [
+        'id'          => 'ninemart',
+        'title'       => 'NineMart — Kasir & Point of Sale (POS)',
+        'badge'       => 'Modul 2 • Tryout UKK 2026',
+        'badge_class' => 'bg-amber-500/10 text-amber-400 border border-amber-500/30',
+        'description' => 'Bahan Tryout UKK 2026 Klaster Pemrograman Web SMKN 9 Semarang. Meliputi dokumen instrumen soal, rancangan database penjualan, dan aset visual.',
+        'tech'        => ['PHP / MySQL', 'PDF Panduan', 'Aset Visual'],
+        'link'        => 'NineMart/',
+        'status'      => 'draft',
+        'icon'        => 'bi-cart-check'
+    ]
+];
 ?>
 <!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portal Pengujian - Perpustakaan UKK PPLG</title>
+    <title>BelajarUKK — Portal Persiapan UKK PPLG / RPL</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
     <style>
+        :root {
+            --bg-canvas: #090d16;
+            --surface-card: rgba(255, 255, 255, 0.04);
+            --surface-hover: rgba(255, 255, 255, 0.08);
+            --border-subtle: rgba(255, 255, 255, 0.08);
+            --border-hover: rgba(59, 130, 246, 0.4);
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+        }
         body {
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-            color: #f8fafc;
+            background-color: var(--bg-canvas);
+            color: var(--text-primary);
             min-height: 100vh;
-            display: flex;
-            align-items: center;
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
         }
-        .portal-card {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
+        .hero-glow {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 600px;
+            height: 350px;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, rgba(9, 13, 22, 0) 70%);
+            pointer-events: none;
+            z-index: 0;
+        }
+        .content-wrap {
+            position: relative;
+            z-index: 1;
+        }
+        .card-module {
+            background: var(--surface-card);
+            border: 1px solid var(--border-subtle);
+            backdrop-filter: blur(8px);
+            transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+        }
+        .card-module:hover {
+            transform: translateY(-4px);
+            background: var(--surface-hover);
+            border-color: var(--border-hover);
+        }
+        .tech-pill {
+            background: rgba(255, 255, 255, 0.06);
             border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: all 0.3s ease;
-        }
-        .portal-card:hover {
-            transform: translateY(-5px);
-            border-color: rgba(59, 130, 246, 0.5);
-            background: rgba(255, 255, 255, 0.08);
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
+            font-size: 0.75rem;
+            color: #cbd5e1;
         }
     </style>
 </head>
 <body class="py-5">
+    <div class="hero-glow"></div>
+    <div class="container content-wrap py-4">
+        
+        <!-- Header -->
+        <div class="text-center max-w-2xl mx-auto mb-5">
+            <div class="d-inline-flex align-items-center gap-2 px-3 py-1 rounded-pill mb-3 border border-primary-subtle bg-primary bg-opacity-10 text-primary small fw-semibold">
+                <i class="bi bi-mortarboard-fill"></i> Kurikulum Merdeka & Standar Industri
+            </div>
+            <h1 class="display-5 fw-bold text-white tracking-tight mb-3">BelajarUKK</h1>
+            <p class="text-secondary fs-6 mb-0 mx-auto" style="max-width: 620px;">
+                Repositori terpadu paket latihan dan persiapan <strong>Uji Kompetensi Keahlian (UKK)</strong> jurusan Pengembangan Perangkat Lunak dan GIM (PPLG) serta Rekayasa Perangkat Lunak (RPL).
+            </p>
+        </div>
 
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-lg-10">
-
-                <!-- Header Brand -->
-                <div class="text-center mb-5">
-                    <div class="badge bg-primary px-3 py-2 rounded-pill text-uppercase fw-semibold mb-2 shadow-sm">
-                        UKK PPLG / RPL Standar Industri
+        <!-- Modules Grid -->
+        <div class="row g-4 justify-content-center mb-5">
+            <?php foreach ($modules as $mod): ?>
+            <div class="col-lg-6">
+                <div class="card card-module rounded-4 h-100 p-4 d-flex flex-column">
+                    <div class="d-flex align-items-start justify-content-between mb-3">
+                        <div class="p-3 rounded-3 bg-primary bg-opacity-10 text-primary border border-primary-subtle">
+                            <i class="bi <?= $mod['icon'] ?> fs-4"></i>
+                        </div>
+                        <span class="badge rounded-pill <?= $mod['badge_class'] ?> px-3 py-2 fw-normal">
+                            <?= $mod['badge'] ?>
+                        </span>
                     </div>
-                    <h1 class="display-5 fw-bold text-white mb-2">Aplikasi Manajemen Perpustakaan</h1>
-                    <p class="text-secondary fs-5">Native PHP Procedural Modular & Database Relasional MySQL</p>
-                    
-                    <!-- Status Indikator Database -->
-                    <div class="d-inline-flex align-items-center gap-2 px-3 py-1 rounded-pill mt-2 border <?= $db_connected ? 'bg-success bg-opacity-25 border-success text-success-emphasis' : 'bg-danger bg-opacity-25 border-danger text-danger-emphasis' ?>">
-                        <span class="p-1 rounded-circle <?= $db_connected ? 'bg-success' : 'bg-danger' ?> d-inline-block"></span>
-                        <small class="fw-semibold text-white">
-                            <?= $db_connected ? "Database Terhubung: <strong>db_perpustakaan</strong> ({$total_buku} Buku, {$total_anggota} Anggota, {$total_pinjam} Transaksi)" : "Database Terputus: {$db_error}" ?>
-                        </small>
+
+                    <h4 class="fw-bold text-white mb-2"><?= $mod['title'] ?></h4>
+                    <p class="text-secondary small leading-relaxed mb-4 flex-grow-1">
+                        <?= $mod['description'] ?>
+                    </p>
+
+                    <!-- Tech Stack Tags -->
+                    <div class="d-flex flex-wrap gap-1 mb-4">
+                        <?php foreach ($mod['tech'] as $t): ?>
+                            <span class="tech-pill px-2.5 py-1 rounded-pill fw-medium"><?= $t ?></span>
+                        <?php endforeach; ?>
+                    </div>
+
+                    <!-- Action Button -->
+                    <div>
+                        <a href="<?= $mod['link'] ?>" class="btn btn-primary w-100 py-2.5 rounded-3 fw-semibold d-inline-flex align-items-center justify-content-center gap-2 shadow-sm">
+                            Buka Modul <i class="bi bi-arrow-right"></i>
+                        </a>
                     </div>
                 </div>
+            </div>
+            <?php endforeach; ?>
+        </div>
 
-                <!-- Pilihan Dua Versi Tampilan -->
-                <div class="row g-4 mb-5">
-                    <!-- Versi 1: Polos (Semantic HTML & Pure CSS) -->
-                    <div class="col-md-6">
-                        <div class="card h-100 rounded-4 portal-card p-4">
-                            <div class="d-flex align-items-center justify-content-between mb-3">
-                                <span class="badge bg-secondary">Versi 1</span>
-                                <i class="bi bi-filetype-css fs-2 text-info"></i>
-                            </div>
-                            <h3 class="fw-bold text-white">Versi Polos (Vanilla CSS)</h3>
-                            <p class="text-secondary small mb-4">
-                                Dibangun murni menggunakan <strong>HTML5 Semantik</strong> dan 1 berkas <strong>CSS mandiri (assets/style.css)</strong> tanpa CDN/library luar. Sangat ringan, terstruktur rapi, dan mudah dipelajari untuk dasar kompetensi.
-                            </p>
-                            <div class="mt-auto">
-                                <a href="versi-polos/index.php" class="btn btn-outline-info w-100 py-2 fw-semibold">
-                                    Buka Versi Polos <i class="bi bi-arrow-right ms-1"></i>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Versi 2: Bootstrap 5 CDN -->
-                    <div class="col-md-6">
-                        <div class="card h-100 rounded-4 portal-card p-4">
-                            <div class="d-flex align-items-center justify-content-between mb-3">
-                                <span class="badge bg-primary">Versi 2</span>
-                                <i class="bi bi-bootstrap-fill fs-2 text-primary"></i>
-                            </div>
-                            <h3 class="fw-bold text-white">Versi Bootstrap 5.3</h3>
-                            <p class="text-secondary small mb-4">
-                                Logika PHP, query database, dan nama berkas <strong>100% IDENTIK</strong> dengan versi polos, namun tampilan menggunakan framework <strong>Bootstrap 5.3 CDN & Bootstrap Icons</strong> dengan antarmuka modern siap saji.
-                            </p>
-                            <div class="mt-auto">
-                                <a href="versi-bootstrap/index.php" class="btn btn-primary w-100 py-2 fw-semibold shadow-sm">
-                                    Buka Versi Bootstrap <i class="bi bi-arrow-right ms-1"></i>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Info Kredensial Login & Panduan -->
-                <div class="card portal-card rounded-4 p-4 border-0">
-                    <div class="row align-items-center">
-                        <div class="col-md-7 mb-3 mb-md-0">
-                            <h5 class="fw-bold text-white mb-1"><i class="bi bi-shield-lock text-warning me-2"></i>Akun Administrator Default</h5>
-                            <p class="text-secondary small mb-0">Gunakan akun ini saat mengakses form login pada kedua versi:</p>
-                            <div class="d-flex gap-3 mt-2 text-white font-monospace small">
-                                <div>Username: <strong class="text-warning">admin</strong></div>
-                                <div>Password: <strong class="text-warning">admin123</strong></div>
-                            </div>
-                        </div>
-                        <div class="col-md-5 text-md-end">
-                            <a href="https://github.com/SabilMurti/PerpusUKK" target="_blank" class="btn btn-sm btn-outline-light me-2">
-                                <i class="bi bi-github me-1"></i> GitHub Repo
-                            </a>
-                            <a href="test_queries.php" target="_blank" class="btn btn-sm btn-outline-success">
-                                <i class="bi bi-check-circle me-1"></i> Uji Query Database
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="text-center text-secondary small mt-4">
-                    &copy; <?= date('Y') ?> Proyek Referensi UKK PPLG &bull; Dibuat dengan Standar Industri Bersih
-                </div>
-
+        <!-- System Footer -->
+        <div class="border-top border-secondary border-opacity-10 pt-4 mt-5 d-flex flex-column flex-md-row align-items-center justify-content-between text-secondary small">
+            <div>
+                &copy; <?= date('Y') ?> <strong>BelajarUKK</strong> &bull; Repositori Bahan Ajar SMK PPLG / RPL
+            </div>
+            <div class="mt-2 mt-md-0">
+                <a href="https://github.com/SabilMurti/BelajarUKK" target="_blank" class="text-secondary text-decoration-none hover-white">
+                    <i class="bi bi-github me-1"></i> GitHub: SabilMurti/BelajarUKK
+                </a>
             </div>
         </div>
-    </div>
 
+    </div>
 </body>
 </html>
