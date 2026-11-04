@@ -1,4 +1,4 @@
-# Panduan Teknis & Presentasi Canva NineMart UKK 2026
+# Panduan Teknis & Presentasi Canva NineMart UKK 2026 (Executive Dark-Tech Edition)
 
 Dokumen ini memuat panduan lengkap akses presentasi Canva, struktur alur teknis aplikasi NineMart per slide, dan panduan presentasi di hadapan asesor Uji Kompetensi Keahlian (UKK) 2026 Klaster Pemrograman Web SMK Negeri 9 Semarang.
 
@@ -6,23 +6,25 @@ Dokumen ini memuat panduan lengkap akses presentasi Canva, struktur alur teknis 
 
 ## 1. Tautan Langsung Desain Canva (Live & Editable)
 
-Desain presentasi telah dibuat dan terhubung di akun Canva (**Heilen Audio**):
-* **Tautan Presentasi Canva (Dengan Screenshot Asli Terpasang - 9 Slide):**  
-  👉 **[Buka Presentasi di Canva Editor](https://www.canva.com/api/design/eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2R0NNIiwiZXhwaXJ5IjoxNzk2Mzg2MTc4Mzc5fQ..Sieovg4iVdqzpITe.vH_JrmaMMrGQSWZ6dIWtWT-LkTe8Q0Ngf_OQQnlv1JnE3o4t0Qv94mzUXATpiV8uSRw37JK5aLVv5YKNtaDvxMXLF_FqrYqdTjLDVFSAis_JiaY.fbHQMZ8avxxdZwQx2AanyQ/edit)**  
-  *(Atau tautan pendek tampilan:* `https://www.canva.com/d/ujASB880Ox-F6ak`*)*
-* **Tautan Alternatif (7 Slide Arsitektur):**  
-  👉 **[https://canva.link/8zvjyorssd61tor](https://canva.link/8zvjyorssd61tor)**
+Desain presentasi telah dibuat dan terhubung di akun Canva (**Heilen Audio**) dengan gaya visual modern dan screenshot terpasang:
+* **Tautan Presentasi Canva Utama (Gaya Modern Visual - 9 Slide):**  
+  👉 **[Buka Presentasi di Canva Editor (Desain Baru)](https://www.canva.com/api/design/eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2R0NNIiwiZXhwaXJ5IjoxNzk2Mzg3NDkxNjk0fQ..CEdRauOwD72N4cdY.mGIFX2g-4T0lUMwfe-aeipP6EIrL83cKS2BT-pZpLs2jM4S-SErYh8PIOvj0wcgGYDKwaXn6Be-qZXdWMNZRAt3RRB7a7tpRAEoz1aI30c4UsPc.ZlrLr8RRFmD5C80KAbVdkA/edit)**  
+  *(Tautan pendek tampilan:* `https://www.canva.com/d/becZGQ2V2BC5-9Z`*)*
+* **Tautan Alternatif (Gaya Minimalis - 9 Slide):**  
+  👉 **[https://www.canva.com/d/ujASB880Ox-F6ak](https://www.canva.com/d/ujASB880Ox-F6ak)**
 
 ---
 
-## 2. Berkas Presentasi Lokal Siap Pakai (10 Slide Lengkap + Screenshot)
+## 2. Berkas Presentasi Lokal Siap Pakai (10 Slide Lengkap + Browser Window Mockup)
 
 * **Lokasi Berkas:**  
   `NineMart/dokumen/PRESENTASI_NINEMART_CANVA.pptx` (2.96 MB)
-* **Karakteristik Desain:**  
-  - Format Widescreen 16:9 resolusi tinggi.
-  - Murni penjelasan teknis alur sistem (Zero marketing fluff).
-  - Setiap slide memuat **screenshot asli ukuran besar** yang diekstrak langsung dari lembar kerja soal ujian UKK 2026.
+* **Karakteristik Desain Baru (Executive Dark-Tech):**  
+  - Tema elegan gelap (*Deep Obsidian `#0B0F19`* & *Elevated Slate Container `#131B2E`*).
+  - Aksen visual *Electric Cyan (`#06B6D4`)* dan *Indigo (`#6366F1`)*.
+  - Setiap screenshot dibingkai dalam **Browser Window Mockup** dengan tombol window 🔴🟡🟢 dan path URL aktif (`https://localhost/NineMart/...`).
+  - Label badge spesifikasi teknis di setiap alur (`[Tech Stack] PDO Prepared Statements | Session Guard...`).
+  - Murni penjelasan alur teknis sistem tanpa basa-basi marketing.
 
 ### Panduan 1-Klik Impor ke Canva Web:
 Jika ingin mengedit berkas PPTX ini di Canva:
@@ -34,18 +36,18 @@ Jika ingin mengedit berkas PPTX ini di Canva:
 
 ## 3. Rincian Struktur 10 Slide Presentasi Teknis NineMart
 
-| Slide | Judul & Topik | Screenshot Terpasang | Poin Penjelasan Teknis Utama |
+| Slide | Modul & Alur Sistem | Screenshot & Bingkai Mockup | Poin Penjelasan Teknis Utama |
 |---|---|---|---|
-| **1** | **Judul & Identitas Peserta** | Banner Login Lawang Sewu | Identitas peserta Sabil Murti, SMKN 9 Semarang, stack PHP 8 Native & PDO. |
-| **2** | **Alur 1: Autentikasi Pengguna (Login)** | `01_halaman_login.png` | Verifikasi kredensial PDO prepared statement, proteksi SQLi, regenerasi ID sesi. |
-| **3** | **Alur 2: Dashboard Sugeng Rawuh** | `02_halaman_dashboard_sugeng_rawuh.png` | Navigasi menu atas, sambutan Sugeng Rawuh, proteksi session guard (akses tanpa login ditolak). |
-| **4** | **Alur 3: Manajemen Data Pengguna** | `03_halaman_kelola_pengguna.png` | CRUD akun kasir & admin, proteksi akun aktif dilarang dihapus (anti-lockout). |
-| **5** | **Alur 4: Fitur Ubah Password** | `04_halaman_ubah_password.png` | Validasi batasan panjang karakter password baru maksimal 10 karakter sesuai soal UKK. |
-| **6** | **Alur 5: Kelompok Barang (Kategori)** | `05_halaman_kelompok_barang.png` | Klasifikasi jenis barang retail, tombol tambah perak, pensil edit, silang hapus, integritas FK. |
-| **7** | **Alur 6: Data Pemasok (Supplier)** | `06_halaman_data_pemasok.png` | Pencatatan vendor supplier rekanan toko (nama, alamat, no telp) sebagai rujukan barang. |
-| **8** | **Alur 7: Katalog Barang & Stok** | `07_halaman_data_barang.png` | Barcode unik, dropdown relasi kelompok & pemasok, validasi harga & stok positif (>= 0). |
-| **9** | **Alur 8: Logout (Terminasi Sesi)** | `09_halaman_konfirmasi_logout.png` | session_unset, session_destroy, penghapusan session cookie, redirect ke login. |
-| **10** | **Spesifikasi Database (4 Tabel)** | Diagram Kartu Relasi | Penjelasan 4 tabel InnoDB: `tblpengguna`, `tblkelompok`, `tblpemasok`, `tblbarang`. |
+| **1** | **Judul & Identitas Ujian** | Mockup `01_halaman_login.png` | Identitas peserta Sabil Murti, SMKN 9 Semarang, PHP 8 Native & PDO MySQL. |
+| **2** | **Modul 01: Autentikasi (Login)** | Mockup `login.php` | Verifikasi kredensial PDO prepared statement, anti-SQLi, mitigasi session fixation. |
+| **3** | **Modul 02: Dashboard Sugeng Rawuh** | Mockup `index.php` | Sambutan khas SMKN 9, navigasi menu terpusat, session guard middleware. |
+| **4** | **Modul 03: Kelola Data Pengguna** | Mockup `pengguna.php` | CRUD akun kasir & admin, proteksi akun aktif tidak boleh dihapus sendiri (anti-lockout). |
+| **5** | **Modul 04: Fitur Ubah Password** | Mockup `ubah_password.php` | Validasi batasan panjang kata sandi baru maksimal 10 karakter sesuai soal UKK. |
+| **6** | **Modul 05: Kelompok Barang (Kategori)** | Mockup `kelompok.php` | Klasifikasi kategori retail, aksi tambah perak, pensil edit, silang hapus, integritas FK. |
+| **7** | **Modul 06: Data Pemasok (Supplier)** | Mockup `pemasok.php` | Pencatatan vendor supplier rekanan toko (nama, alamat, no telp) sebagai rujukan barang. |
+| **8** | **Modul 07: Katalog Barang & Stok** | Mockup `barang.php` | Barcode unik, dropdown dinamis kelompok & pemasok, validasi harga & stok positif. |
+| **9** | **Modul 08: Logout (Terminasi Sesi)** | Mockup `logout.php` | `session_unset()`, `session_destroy()`, pembersihan cookie browser, redirect login. |
+| **10** | **Spesifikasi Database (4 Tabel)** | Grid 4 Kartu Entitas Relasi | Penjelasan 4 tabel relasional InnoDB (`tblpengguna`, `tblkelompok`, `tblpemasok`, `tblbarang`). |
 
 ---
 
