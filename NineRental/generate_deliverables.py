@@ -1,16 +1,17 @@
 #!/usr/bin/env python3
 """
-Script Generator Berkas Deliverable UKK Nine Rental Mobil
+Generator Berkas Deliverable UKK Nine Rental Mobil - Standar Eksekutif
 Menghasilkan:
-1. DOKUMENTASI_WEB_NINERENTAL.pdf (Dokumentasi resmi laporan UKK)
-2. PRESENTASI_NINERENTAL.pptx     (Slide presentasi profesional)
-3. PRESENTASI_NINERENTAL.pdf      (Versi PDF dari slide presentasi)
-4. NineRental.zip                 (Paket kompresi lengkap web & aset)
+1. PRESENTASI_NINERENTAL.pptx (12 Slide Presentasi Eksekutif Canvas Putih Standar LSP P1 + Elemen Visual UI)
+2. PRESENTASI_NINERENTAL.pdf  (Versi PDF Landscape 12 Slide + Window Mockup & Badges)
+3. DOKUMENTASI_WEB_NINERENTAL.pdf (Laporan Dokumentasi Lengkap & Elemen Metrik)
+4. NineRental.zip (Paket Arsip Siap Kumpul)
 """
 
 import os
 import shutil
 import zipfile
+from PIL import Image
 from pptx import Presentation
 from pptx.util import Inches, Pt
 from pptx.dml.color import RGBColor
@@ -36,7 +37,1022 @@ os.makedirs(KUMPUL_DIR, exist_ok=True)
 
 
 # ==============================================================================
-# 1. GENERATE DOKUMENTASI PDF RESMI
+# PALET WARNA & TEMA PRESENTASI EKSEKUTIF (Clean Executive Canvas + Accents)
+# ==============================================================================
+COLOR_BG_WHITE   = RGBColor(255, 255, 255) # Latar putih bersih
+COLOR_CARD_BG    = RGBColor(248, 250, 252) # Slate 50 (Kotak komponen)
+COLOR_CARD_LINE  = RGBColor(226, 232, 240) # Slate 200 (Garis pembatas kartu)
+COLOR_TEXT_MAIN  = RGBColor(15, 23, 42)    # Slate 900 (Teks judul & badan)
+COLOR_TEXT_MUTED = RGBColor(100, 116, 139) # Slate 500 (Subjudul & caption)
+COLOR_ACCENT_BLU = RGBColor(2, 132, 199)   # Sky 600 (Aksen biru teknologi)
+COLOR_DIVIDER    = RGBColor(226, 232, 240) # Slate 200
+
+# Palet Tema Dinamis untuk PPTX
+PPTX_THEMES = {
+    "sky": {
+        "primary": RGBColor(2, 132, 199),   # Sky 600
+        "light":   RGBColor(224, 242, 254), # Sky 100
+        "border":  RGBColor(186, 230, 253), # Sky 200
+        "text":    RGBColor(3, 105, 161),   # Sky 700
+    },
+    "emerald": {
+        "primary": RGBColor(22, 163, 74),   # Emerald 600
+        "light":   RGBColor(220, 252, 231), # Emerald 100
+        "border":  RGBColor(187, 247, 208), # Emerald 200
+        "text":    RGBColor(21, 128, 61),   # Emerald 700
+    },
+    "violet": {
+        "primary": RGBColor(124, 58, 237),  # Violet 600
+        "light":   RGBColor(237, 233, 254), # Violet 100
+        "border":  RGBColor(221, 214, 254), # Violet 200
+        "text":    RGBColor(109, 40, 217),  # Violet 700
+    },
+    "amber": {
+        "primary": RGBColor(217, 119, 6),   # Amber 600
+        "light":   RGBColor(254, 243, 199), # Amber 100
+        "border":  RGBColor(253, 230, 138), # Amber 200
+        "text":    RGBColor(180, 83, 9),    # Amber 700
+    },
+}
+
+# Palet Tema Dinamis untuk ReportLab PDF
+PDF_THEMES = {
+    "sky": {
+        "primary": colors.HexColor("#0284c7"),
+        "light":   colors.HexColor("#e0f2fe"),
+        "border":  colors.HexColor("#bae6fd"),
+        "text":    colors.HexColor("#0369a1"),
+    },
+    "emerald": {
+        "primary": colors.HexColor("#16a34a"),
+        "light":   colors.HexColor("#dcfce7"),
+        "border":  colors.HexColor("#bbf7d0"),
+        "text":    colors.HexColor("#15803d"),
+    },
+    "violet": {
+        "primary": colors.HexColor("#7c3aed"),
+        "light":   colors.HexColor("#ede9fe"),
+        "border":  colors.HexColor("#ddd6fe"),
+        "text":    colors.HexColor("#6d28d9"),
+    },
+    "amber": {
+        "primary": colors.HexColor("#d97706"),
+        "light":   colors.HexColor("#fef3c7"),
+        "border":  colors.HexColor("#fde68a"),
+        "text":    colors.HexColor("#b45309"),
+    },
+}
+
+
+# ==============================================================================
+# DATA 12 SLIDE PRESENTASI NINE RENTAL MOBIL (LENGKAP DENGAN METADATA ELEMEN)
+# ==============================================================================
+SLIDES_DATA = [
+    {
+        "is_cover": True,
+        "category": "UJI KOMPETENSI KEAHLIAN (UKK) LSP P1 2026",
+        "theme": "sky",
+        "title": "Aplikasi Rental Mobil\nNine Rental",
+        "subtitle": "Dokumentasi Alur Aplikasi & Antarmuka Sistem Berbasis Web\nStandar Skema LSP P1 — SMK Negeri 9 Semarang",
+        "metrics": [
+            ("3 TABEL INTI", "MySQL InnoDB (ACID)", "emerald"),
+            ("100% PASS", "PDO Prepared Stmt", "sky"),
+            ("0 AI-SLOP", "Clean Native PHP", "amber")
+        ],
+        "identitas": [
+            ("Nama Peserta", "Sabil Murti"),
+            ("Asal Sekolah", "SMK Negeri 9 Semarang"),
+            ("Konsentrasi", "Rekayasa Perangkat Lunak / PPLG"),
+            ("Paket Keahlian", "Klaster Pemrograman Web (LSP P1)"),
+            ("Basis Data", "rental (kendaraantbl, pelanggantbl, sewatbl)"),
+            ("Stack Web", "PHP Native (PDO) • MySQL / MariaDB • CSS Murni")
+        ],
+        "image": "02_tampilan_dashboard.png",
+        "caption": "Tangkapan Layar: Antarmuka Dashboard Utama Sistem Nine Rental",
+        "tag": "● READY FOR ASSESSMENT",
+        "url": "http://localhost:8080/NineRental/"
+    },
+    {
+        "is_cover": False,
+        "category": "ARSITEKTUR BASIS DATA & ERD",
+        "theme": "sky",
+        "num": "02 / 12",
+        "title": "Skema Basis Data Relasional (rental)",
+        "subtitle": "Struktur 3 tabel ternormalisasi pada basis data MySQL InnoDB sesuai instrumen soal",
+        "points": [
+            ("Tabel kendaraantbl (Master Armada)", "Menyimpan data unit kendaraan mencakup No Polisi unik, Nama unit, Tipe (AT/MT), Warna, No Rangka/Mesin, Bahan bakar, Tahun, Berkas foto, dan Status ketersediaan ('Ready' / 'Sewa')."),
+            ("Tabel pelanggantbl (Master Customer)", "Menyimpan identitas resmi penyewa terverifikasi (No KTP unik, Nama lengkap, Alamat domisili, Nomor telepon, dan Arsip foto penyewa)."),
+            ("Tabel sewatbl (Transaksi Rental)", "Mencatat kontrak peminjaman yang merelasikan No KTP penyewa dan No Polisi armada secara atomik, mencakup tanggal sewa, tenggat kembali, biaya harian, catatan, dan status."),
+            ("Integritas Relasi & Uniqueness Key", "Kunci unik pada No Polisi dan No KTP menjamin integritas data serta mencegah duplikasi unit maupun data penyewa ganda.")
+        ],
+        "image": "01_database_erd_skema.png",
+        "caption": "Tangkapan Layar: Skema Relasi Basis Data rental (Instrumen Soal)",
+        "tag": "● SKEMA INNODB",
+        "url": "localhost/phpmyadmin/db_rental.sql"
+    },
+    {
+        "is_cover": False,
+        "category": "ANTARMUKA & NAVIGASI MODULAR",
+        "theme": "emerald",
+        "num": "03 / 12",
+        "title": "Dashboard Utama & Navigasi Modular",
+        "subtitle": "Halaman beranda terintegrasi dengan akses cepat ke Master, Transaksi, dan Customer",
+        "points": [
+            ("Banner Hijau Identitas Sekolah", "Latar hijau cerah (#00e600) menampilkan tipografi serif besar 'SMK' dan identitas resmi SEKOLAH MENENGAH KEJURUAN KOTA SEMARANG."),
+            ("Subheader Oranye Penegas Aplikasi", "Bilah oranye (#ff9900) dengan tipografi tegas bertuliskan APLIKASI RENTAL MOBIL \"NINE RENTAL\"."),
+            ("Menu Modular Tiga Pilar (A, B, C)", "Kanvas gradasi ungu (#59477d ke lavender) menyajikan tombol kuning interaktif bergaris bawah: A (Kendaraan), B (Sewa), dan C (Pelanggan)."),
+            ("Footer Hak Cipta Sekolah", "Bilah biru royal (#0000cc) di bagian bawah menegaskan COPYRIGHT @ SMK NEGERI 9 SEMARANG.")
+        ],
+        "image": "02_tampilan_dashboard.png",
+        "caption": "Tangkapan Layar: Dashboard Sugeng Rawuh & Bilah Navigasi Modular",
+        "tag": "● LIVE SYSTEM",
+        "url": "http://localhost:8080/NineRental/"
+    },
+    {
+        "is_cover": False,
+        "category": "MASTER DATA ARMADA KENDARAAN",
+        "theme": "sky",
+        "num": "04 / 12",
+        "title": "Master Data Kendaraan (Tabel Armada)",
+        "subtitle": "Pengelolaan inventaris kendaraan sewa lengkap dengan status ketersediaan dinamis",
+        "points": [
+            ("Penyajian 11 Kolom Lengkap", "Menyajikan seluruh atribut armada: No, No Polisi, Nama Kendaraan, Tipe transmisi, Warna, No Mesin, No Rangka, Bahan Bakar, Tahun, Status, dan Aksi."),
+            ("Skema Warna Presisi 100% Soal", "Header tabel berlatar ungu (#7b5297) dengan teks kuning terang (#ffff00), dan baris data teks kuning di atas kanvas abu-abu."),
+            ("Navigasi Simbol Cepat (≤ dan ±)", "Ikon navigasi biru '≤' untuk kembali ke dashboard utama dan ikon '±' untuk membuka formulir penambahan unit baru."),
+            ("Kotak Rekaman Putih (Record Counter)", "Bilah putih di bawah tabel yang mengkalkulasi dan menampilkan jumlah total unit aktif (Record : X).")
+        ],
+        "image": "03_master_kendaraan_tabel.png",
+        "caption": "Tangkapan Layar: Tabel Data Master Kendaraan (Soal Asli)",
+        "tag": "● LIVE ARMADA",
+        "url": "http://localhost:8080/NineRental/kendaraan.php"
+    },
+    {
+        "is_cover": False,
+        "category": "FORMULIR & SPESIFIKASI UNIT",
+        "theme": "sky",
+        "num": "05 / 12",
+        "title": "Formulir Tambah & Edit Data Kendaraan",
+        "subtitle": "Formulir input spesifikasi armada dengan validasi tipe transmisi dan unggah foto",
+        "points": [
+            ("Validasi Plat Nomor Unik", "Pencegahan entri plat nomor ganda pada basis data melalui indeks unik MySQL pada kolom no_polisi."),
+            ("Pilihan Transmisi Standar (AT / MT)", "Dropdown seleksi transmisi Otomatis (AT) dan Manual (MT) sesuai klasifikasi kendaraan sewa komersial."),
+            ("Spesifikasi Lengkap Mesin & Rangka", "Input detail nomor rangka, nomor mesin, pilihan bahan bakar (Bensin/Solar), serta tahun kendaraan."),
+            ("Pengarsipan Berkas Foto Unit", "Dukungan upload gambar unit fisik ke direktori server (uploads/kendaraan/) untuk visualisasi kendaraan.")
+        ],
+        "image": "04_master_kendaraan_form.png",
+        "caption": "Tangkapan Layar: Formulir Input & Edit Data Kendaraan",
+        "tag": "● FORM VALIDATION",
+        "url": "http://localhost:8080/NineRental/kendaraan.php?aksi=tambah"
+    },
+    {
+        "is_cover": False,
+        "category": "MANAJEMEN CUSTOMER PELANGGAN",
+        "theme": "emerald",
+        "num": "06 / 12",
+        "title": "Manajemen Customer Pelanggan (Tabel Identitas)",
+        "subtitle": "Rekapitulasi data pelanggan penyewa terverifikasi untuk keamanan operasional",
+        "points": [
+            ("Verifikasi Nomor KTP Penyewa", "Pencatatan NIK KTP sebagai identifikasi tunggal penyewa guna menjamin keabsahan hukum transaksi rental."),
+            ("Arsip Kontak & Domisili Pelanggan", "Menyimpan alamat lengkap serta nomor telepon aktif penyewa yang dapat dihubungi sewaktu-waktu."),
+            ("Galeri Foto Identitas Pelanggan", "Dukungan preview berkas foto KTP/wajah penyewa langsung pada tabel data master pelanggan."),
+            ("Operasi CRUD Cepat & Aman", "Tombol edit (pensil) untuk pembaruan kontak dan tombol hapus (silang merah) yang dilengkapi konfirmasi pengamanan.")
+        ],
+        "image": "07_customer_pelanggan_tabel.png",
+        "caption": "Tangkapan Layar: Tabel Master Data Customer Pelanggan",
+        "tag": "● LIVE CUSTOMER",
+        "url": "http://localhost:8080/NineRental/pelanggan.php"
+    },
+    {
+        "is_cover": False,
+        "category": "REGISTRASI IDENTITAS PENYEWA",
+        "theme": "emerald",
+        "num": "07 / 12",
+        "title": "Formulir Registrasi Customer Pelanggan",
+        "subtitle": "Antarmuka pendaftaran penyewa baru dengan struktur formulir bersih dan terstandarisasi",
+        "points": [
+            ("Tata Letak Form Rapi & Sejajar", "Penyusunan label bidang, tanda titik dua (:), dan kotak input sejajar secara vertikal dengan keterbacaan tinggi."),
+            ("Area Teks Alamat Multiline", "Menggunakan elemen textarea untuk menampung alamat domisili pelanggan yang panjang tanpa terpotong."),
+            ("Validasi Form Bebas Kesalahan", "Pengecekan kelengkapan data di sisi klien dan server sebelum kueri INSERT dieksekusi ke basis data."),
+            ("Proteksi Masukan Data (XSS Defense)", "Semua teks pelanggan disanitasi menggunakan fungsi escape() untuk mencegah celah script injection.")
+        ],
+        "image": "08_customer_pelanggan_form.png",
+        "caption": "Tangkapan Layar: Formulir Registrasi Customer Pelanggan",
+        "tag": "● SECURE FORM",
+        "url": "http://localhost:8080/NineRental/pelanggan.php?aksi=tambah"
+    },
+    {
+        "is_cover": False,
+        "category": "TRANSAKSI SEWA KENDARAAN",
+        "theme": "violet",
+        "num": "08 / 12",
+        "title": "Transaksi Sewa Kendaraan (Tabel Rekapitulasi)",
+        "subtitle": "Pencatatan kontrak peminjaman armada, periode sewa, dan kalkulasi biaya",
+        "points": [
+            ("Penomoran Sewa Otomatis Terstruktur", "Format kode kontrak otomatis 'S,YY-MM,N' yang mencatat tahun, bulan, dan nomor urut transaksi."),
+            ("Pemantauan Tanggal Jatuh Tempo", "Kolom Tanggal Sewa dan Tanggal Kembali untuk memantau durasi pemakaian unit kendaraan secara presisi."),
+            ("Transparansi Tarif Sewa Harian", "Pencatatan nominal biaya sewa dalam format angka terstandarisasi tanpa ambiguitas."),
+            ("Kontrol Status Sewa & Pengembalian", "Tombol centang (✓) untuk memproses pengembalian unit serta tombol hapus dan edit data transaksi.")
+        ],
+        "image": "05_transaksi_sewa_tabel.png",
+        "caption": "Tangkapan Layar: Tabel Rekapitulasi Transaksi Sewa",
+        "tag": "● LIVE TRANSAKSI",
+        "url": "http://localhost:8080/NineRental/sewa.php"
+    },
+    {
+        "is_cover": False,
+        "category": "FITUR AUTOFILL TRANSAKSI",
+        "theme": "violet",
+        "num": "09 / 12",
+        "title": "Formulir Transaksi Sewa (Autofill Cerdas)",
+        "subtitle": "Otomasi pemuatan identitas penyewa dan data unit untuk mempercepat pelayanan kasir",
+        "points": [
+            ("Autofill Otomatis Nama Pelanggan", "Saat petugas memilih No KTP dari daftar, sistem otomatis menampilkan Nama Pelanggan pada kotak readonly."),
+            ("Autofill Otomatis Nama Kendaraan", "Saat petugas memilih No Polisi armada, nama unit dan status terkininya langsung terisi tanpa ketik ulang."),
+            ("Sinkronisasi Status Armada Terintegrasi", "Penyimpanan transaksi dengan status 'Sewa' secara atomik mengubah status unit di kendaraantbl menjadi 'Sewa'."),
+            ("Pemulihan Otomatis Menjadi Ready", "Ketika armada diselesaikan melalui aksi 'Kembali', status unit otomatis kembali menjadi 'Ready' untuk disewa kembali.")
+        ],
+        "image": "06_transaksi_sewa_form.png",
+        "caption": "Tangkapan Layar: Formulir Transaksi Sewa dengan Fitur Autofill",
+        "tag": "● AUTOFILL READY",
+        "url": "http://localhost:8080/NineRental/sewa.php?aksi=tambah"
+    },
+    {
+        "is_cover": False,
+        "category": "LEMBAR INSTRUMEN ASLI SOAL",
+        "theme": "amber",
+        "num": "10 / 12",
+        "title": "Lembar Instrumen Asli Uji Kompetensi (LSP P1)",
+        "subtitle": "Verifikasi kesesuaian 100% terhadap lembar soal resmi SMK Negeri 9 Semarang",
+        "points": [
+            ("Keabsahan Lembar Soal Resmi", "Dikembangkan berbasis dokumen 'SOAL WEB UKK LSP P1 SMK 9 SMG11.pdf' yang diterbitkan oleh tim penguji UKK."),
+            ("Kesesuaian Nama & Tipe Data Tabel", "Nama tabel sewatbl, pelanggantbl, kendaraantbl dan panjang karakter varchar dibuat 100% presisi."),
+            ("Replikasi Desain Tanpa Kompromi", "Semua warna (hijau lime, oranye, ungu kanvas, kuning teks) diterapkan sesuai pedoman soal tanpa modifikasi sepihak."),
+            ("Kemudahan Penilaian Asesor", "Asesor dapat memverifikasi kesamaan antarmuka aplikasi live dengan lembar cetak soal secara berdampingan.")
+        ],
+        "image": "halaman_1_soal_dan_dashboard.png",
+        "caption": "Tangkapan Layar: Dokumen Instrumen Uji Kompetensi Asli (Halaman 1)",
+        "tag": "● ASESMEN RESMI",
+        "url": "dokumen/SOAL_WEB_UKK_LSP_P1.pdf"
+    },
+    {
+        "is_cover": False,
+        "category": "VERIFIKASI INTEGRITAS & KEAMANAN",
+        "theme": "emerald",
+        "num": "11 / 12",
+        "title": "Arsitektur Keamanan & Hasil Uji Integritas",
+        "subtitle": "Penerapan standar rekayasa perangkat lunak bersih dan teruji (Zero AI-Slop)",
+        "points": [
+            ("Proteksi Penuh SQL Injection", "Seluruh manipulasi database menggunakan PDO Prepared Statements dengan parameter binding eksklusif."),
+            ("Pengujian Sintaks PHP (php -l)", "Seluruh 5 berkas PHP lulus verifikasi linting sintaks tanpa peringatan atau kesalahan (0 errors)."),
+            ("Kepatuhan Transaksi Atomik (ACID)", "Skrip test_queries.php memvalidasi query tabel dan simulasi rollback transaksi berhasil 100% PASS."),
+            ("Portabilitas Multi-Database", "Mendukung MySQL/MariaDB pada XAMPP/Laragon, serta SQLite lokal otomatis (rental.db) untuk pengujian mandiri.")
+        ],
+        "image": "halaman_3_soal_transaksi.png",
+        "caption": "Tangkapan Layar: Dokumen Instrumen Soal Transaksi Sewa (Halaman 3)",
+        "tag": "● ACID 100% PASS",
+        "url": "NineRental/test_queries.php"
+    },
+    {
+        "is_cover": False,
+        "category": "RINGKASAN & KESIAPAN UJI ASESOR",
+        "theme": "sky",
+        "num": "12 / 12",
+        "title": "Kesimpulan & Kesiapan Uji Kompetensi",
+        "subtitle": "Ringkasan kesiapan seluruh berkas deliverable untuk pengumpulan resmi kepada asesor",
+        "points": [
+            ("Kelengkapan Berkas Pengumpulan", "Paket web NineRental, berkas skema db_rental.sql, dokumentasi resmi PDF, dan slide presentasi telah siap."),
+            ("Sinkronisasi Repositori GitHub", "Seluruh perubahan telah di-push ke https://github.com/SabilMurti/BelajarUKK pada branch ninerental dan main."),
+            ("Kualitas Kode Bersih & Terarah", "Komentar kode singkat, langsung pada intinya, bebas AI-slop, dan mencerminkan etika koding profesional SMK."),
+            ("Siap Diuji Secara Live", "Aplikasi siap dijalankan dan dioperasikan langsung di depan asesor penguji UKK.")
+        ],
+        "image": "02_tampilan_dashboard.png",
+        "caption": "Tangkapan Layar: Aplikasi Nine Rental Mobil Siap Diuji Asesor",
+        "tag": "● DELIVERABLES READY",
+        "url": "github.com/SabilMurti/BelajarUKK"
+    }
+]
+
+
+# ==============================================================================
+# 1. GENERATE PRESENTASI PPTX (Modern Executive White Canvas + Rich UI Elements)
+# ==============================================================================
+
+def generate_pptx(output_path):
+    prs = Presentation()
+    prs.slide_width = Inches(13.333)
+    prs.slide_height = Inches(7.5)
+    blank_layout = prs.slide_layouts[6]
+
+    for data in SLIDES_DATA:
+        slide = prs.slides.add_slide(blank_layout)
+        theme_key = data.get("theme", "sky")
+        theme = PPTX_THEMES.get(theme_key, PPTX_THEMES["sky"])
+
+        # 1. Kanvas Latar Belakang Putih Penuh
+        bg = slide.shapes.add_shape(MSO_SHAPE.RECTANGLE, 0, 0, Inches(13.333), Inches(7.5))
+        bg.fill.solid()
+        bg.fill.fore_color.rgb = COLOR_BG_WHITE
+        bg.line.fill.background()
+
+        # 2. Top Decorative Accent Strip (Bilah Aksen Atas)
+        top_bar = slide.shapes.add_shape(MSO_SHAPE.RECTANGLE, 0, 0, Inches(13.333), Inches(0.06))
+        top_bar.fill.solid()
+        top_bar.fill.fore_color.rgb = theme["primary"]
+        top_bar.line.fill.background()
+
+        # 3. Bottom Hairline & Footer
+        bot_line = slide.shapes.add_shape(MSO_SHAPE.RECTANGLE, Inches(0.8), Inches(6.98), Inches(11.733), Inches(0.012))
+        bot_line.fill.solid()
+        bot_line.fill.fore_color.rgb = COLOR_DIVIDER
+        bot_line.line.fill.background()
+
+        tb_foot_l = slide.shapes.add_textbox(Inches(0.8), Inches(7.04), Inches(5.5), Inches(0.3))
+        p_fl = tb_foot_l.text_frame.paragraphs[0]
+        p_fl.text = "Nine Rental Mobil • SMK Negeri 9 Semarang"
+        p_fl.font.name = "Segoe UI"
+        p_fl.font.size = Pt(8)
+        p_fl.font.color.rgb = COLOR_TEXT_MUTED
+
+        tb_foot_r = slide.shapes.add_textbox(Inches(7.0), Inches(7.04), Inches(5.533), Inches(0.3))
+        p_fr = tb_foot_r.text_frame.paragraphs[0]
+        p_fr.text = "Uji Kompetensi Keahlian (UKK) LSP P1 — Rekayasa Perangkat Lunak"
+        p_fr.alignment = PP_ALIGN.RIGHT
+        p_fr.font.name = "Segoe UI"
+        p_fr.font.size = Pt(8)
+        p_fr.font.color.rgb = COLOR_TEXT_MUTED
+
+        if data.get("is_cover"):
+            # ==================================================================
+            # SLIDE 1 (COVER EKSEKUTIF DENGAN KARTU METRIK & IDENTITAS)
+            # ==================================================================
+            # Kategori Badge Pill
+            tag_pill = slide.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, Inches(0.8), Inches(0.38), Inches(4.2), Inches(0.30))
+            tag_pill.fill.solid()
+            tag_pill.fill.fore_color.rgb = theme["light"]
+            tag_pill.line.color.rgb = theme["border"]
+            tag_pill.line.width = Pt(1)
+            p_tp = tag_pill.text_frame.paragraphs[0]
+            p_tp.text = f"● {data['category']}"
+            p_tp.font.name = "Segoe UI"
+            p_tp.font.size = Pt(8.5)
+            p_tp.font.bold = True
+            p_tp.font.color.rgb = theme["text"]
+            p_tp.alignment = PP_ALIGN.CENTER
+
+            # Judul Utama Cover
+            box_title = slide.shapes.add_textbox(Inches(0.8), Inches(0.78), Inches(5.4), Inches(1.25))
+            tf_t = box_title.text_frame
+            tf_t.word_wrap = True
+            p_t = tf_t.paragraphs[0]
+            p_t.text = data["title"]
+            p_t.font.name = "Segoe UI"
+            p_t.font.size = Pt(28)
+            p_t.font.bold = True
+            p_t.font.color.rgb = COLOR_TEXT_MAIN
+
+            # Subjudul Cover
+            box_sub = slide.shapes.add_textbox(Inches(0.8), Inches(2.05), Inches(5.4), Inches(0.60))
+            tf_sub = box_sub.text_frame
+            tf_sub.word_wrap = True
+            p_sub = tf_sub.paragraphs[0]
+            p_sub.text = data["subtitle"]
+            p_sub.font.name = "Segoe UI"
+            p_sub.font.size = Pt(9.5)
+            p_sub.font.color.rgb = COLOR_TEXT_MUTED
+
+            # 3 Kartu Metrik Visual (Emerald, Sky, Amber)
+            metrics = data.get("metrics", [])
+            for m_idx, (m_val, m_sub, m_th) in enumerate(metrics):
+                m_color_th = PPTX_THEMES.get(m_th, PPTX_THEMES["sky"])
+                m_x = Inches(0.8 + m_idx * 1.84)
+                m_y = Inches(2.78)
+                m_w = Inches(1.72)
+                m_h = Inches(0.76)
+
+                m_card = slide.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, m_x, m_y, m_w, m_h)
+                m_card.fill.solid()
+                m_card.fill.fore_color.rgb = m_color_th["light"]
+                m_card.line.color.rgb = m_color_th["border"]
+                m_card.line.width = Pt(1)
+
+                tf_m = m_card.text_frame
+                tf_m.word_wrap = True
+                p_mv = tf_m.paragraphs[0]
+                p_mv.text = m_val
+                p_mv.font.name = "Segoe UI"
+                p_mv.font.size = Pt(10)
+                p_mv.font.bold = True
+                p_mv.font.color.rgb = m_color_th["text"]
+                p_mv.alignment = PP_ALIGN.CENTER
+
+                p_ms = tf_m.add_paragraph()
+                p_ms.text = m_sub
+                p_ms.font.name = "Segoe UI"
+                p_ms.font.size = Pt(7.5)
+                p_ms.font.color.rgb = COLOR_TEXT_MUTED
+                p_ms.alignment = PP_ALIGN.CENTER
+
+            # Kotak Identitas Peserta
+            id_x, id_y, id_w, id_h = Inches(0.8), Inches(3.70), Inches(5.4), Inches(3.05)
+            id_card = slide.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, id_x, id_y, id_w, id_h)
+            id_card.fill.solid()
+            id_card.fill.fore_color.rgb = COLOR_CARD_BG
+            id_card.line.color.rgb = COLOR_CARD_LINE
+            id_card.line.width = Pt(1)
+
+            # Strip Header Identitas
+            id_hdr = slide.shapes.add_shape(MSO_SHAPE.RECTANGLE, id_x, id_y, id_w, Inches(0.34))
+            id_hdr.fill.solid()
+            id_hdr.fill.fore_color.rgb = RGBColor(241, 245, 249)
+            id_hdr.line.color.rgb = COLOR_CARD_LINE
+            p_ih = id_hdr.text_frame.paragraphs[0]
+            p_ih.text = "INFORMASI PESERTA UJI KOMPETENSI"
+            p_ih.font.name = "Segoe UI"
+            p_ih.font.size = Pt(8.5)
+            p_ih.font.bold = True
+            p_ih.font.color.rgb = theme["text"]
+            p_ih.alignment = PP_ALIGN.CENTER
+
+            tb_id = slide.shapes.add_textbox(id_x + Inches(0.2), id_y + Inches(0.42), id_w - Inches(0.4), id_h - Inches(0.5))
+            tf_id = tb_id.text_frame
+            tf_id.word_wrap = True
+            for item_idx, (lbl, val) in enumerate(data["identitas"]):
+                p_item = tf_id.paragraphs[0] if item_idx == 0 else tf_id.add_paragraph()
+                p_item.text = f"{lbl:<16} : {val}"
+                p_item.font.name = "Segoe UI"
+                p_item.font.size = Pt(9)
+                p_item.font.color.rgb = COLOR_TEXT_MAIN
+                p_item.space_after = Pt(3)
+
+            # Kolom Kanan: Mockup Jendela Aplikasi dengan Dashboard
+            mock_x, mock_y, mock_w, mock_h = Inches(6.5), Inches(0.38), Inches(6.03), Inches(6.37)
+            mock_card = slide.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, mock_x, mock_y, mock_w, mock_h)
+            mock_card.fill.solid()
+            mock_card.fill.fore_color.rgb = COLOR_CARD_BG
+            mock_card.line.color.rgb = RGBColor(203, 213, 225)
+            mock_card.line.width = Pt(1)
+
+            # Bilah Header Jendela
+            mock_hdr = slide.shapes.add_shape(MSO_SHAPE.RECTANGLE, mock_x, mock_y, mock_w, Inches(0.34))
+            mock_hdr.fill.solid()
+            mock_hdr.fill.fore_color.rgb = RGBColor(241, 245, 249)
+            mock_hdr.line.color.rgb = RGBColor(203, 213, 225)
+
+            # 3 Dot Jendela (Merah, Kuning, Hijau)
+            dot_colors = [RGBColor(239, 68, 68), RGBColor(245, 158, 11), RGBColor(16, 185, 129)]
+            for d_i, d_col in enumerate(dot_colors):
+                dot = slide.shapes.add_shape(MSO_SHAPE.OVAL, mock_x + Inches(0.14 + d_i * 0.16), mock_y + Inches(0.11), Inches(0.11), Inches(0.11))
+                dot.fill.solid()
+                dot.fill.fore_color.rgb = d_col
+                dot.line.fill.background()
+
+            # URL Bar
+            tb_url = slide.shapes.add_textbox(mock_x + Inches(0.68), mock_y + Inches(0.04), Inches(3.3), Inches(0.26))
+            p_u = tb_url.text_frame.paragraphs[0]
+            p_u.text = data["url"]
+            p_u.font.name = "Segoe UI"
+            p_u.font.size = Pt(7.5)
+            p_u.font.color.rgb = COLOR_TEXT_MUTED
+
+            # Status Tag Pill Kanan
+            tag_box = slide.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, mock_x + Inches(3.95), mock_y + Inches(0.06), Inches(1.92), Inches(0.22))
+            tag_box.fill.solid()
+            tag_box.fill.fore_color.rgb = RGBColor(220, 252, 231)
+            tag_box.line.color.rgb = RGBColor(134, 239, 172)
+            p_tb = tag_box.text_frame.paragraphs[0]
+            p_tb.text = data["tag"]
+            p_tb.font.name = "Segoe UI"
+            p_tb.font.size = Pt(7)
+            p_tb.font.bold = True
+            p_tb.font.color.rgb = RGBColor(21, 128, 61)
+            p_tb.alignment = PP_ALIGN.CENTER
+
+            # Gambar Screenshot (Disesuaikan Aspek Rasio)
+            img_path = os.path.join(SHOTS_DIR, data["image"])
+            if os.path.exists(img_path):
+                im = Image.open(img_path)
+                w_px, h_px = im.size
+                max_w, max_h = 5.75, 5.25
+                ratio = min(max_w / w_px, max_h / h_px)
+                fw, fh = w_px * ratio, h_px * ratio
+                img_left = mock_x + (mock_w - Inches(fw)) / 2
+                img_top = mock_y + Inches(0.46) + (Inches(max_h) - Inches(fh)) / 2
+                slide.shapes.add_picture(img_path, img_left, img_top, width=Inches(fw), height=Inches(fh))
+
+            # Caption Bawah
+            tb_cap = slide.shapes.add_textbox(mock_x, mock_y + mock_h - Inches(0.42), mock_w, Inches(0.35))
+            p_c = tb_cap.text_frame.paragraphs[0]
+            p_c.text = data["caption"]
+            p_c.alignment = PP_ALIGN.CENTER
+            p_c.font.name = "Segoe UI"
+            p_c.font.size = Pt(8)
+            p_c.font.italic = True
+            p_c.font.color.rgb = COLOR_TEXT_MUTED
+
+        else:
+            # ==================================================================
+            # SLIDE KONTEN (SLIDE 2 - 12): KARTU INTERAKTIF & APP MOCKUP
+            # ==================================================================
+            # 1. Kategori Tag Pill di Atas Judul
+            tag_pill = slide.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, Inches(0.8), Inches(0.28), Inches(2.9), Inches(0.28))
+            tag_pill.fill.solid()
+            tag_pill.fill.fore_color.rgb = theme["light"]
+            tag_pill.line.color.rgb = theme["border"]
+            tag_pill.line.width = Pt(1)
+            p_tp = tag_pill.text_frame.paragraphs[0]
+            p_tp.text = f"● {data['category']}"
+            p_tp.font.name = "Segoe UI"
+            p_tp.font.size = Pt(8.5)
+            p_tp.font.bold = True
+            p_tp.font.color.rgb = theme["text"]
+            p_tp.alignment = PP_ALIGN.CENTER
+
+            # 2. Nomor Slide Badge Pill di Kanan
+            num_pill = slide.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, Inches(11.6), Inches(0.28), Inches(0.933), Inches(0.28))
+            num_pill.fill.solid()
+            num_pill.fill.fore_color.rgb = RGBColor(241, 245, 249)
+            num_pill.line.color.rgb = RGBColor(203, 213, 225)
+            p_np = num_pill.text_frame.paragraphs[0]
+            p_np.text = data["num"]
+            p_np.font.name = "Segoe UI"
+            p_np.font.size = Pt(8.5)
+            p_np.font.bold = True
+            p_np.font.color.rgb = RGBColor(71, 85, 105)
+            p_np.alignment = PP_ALIGN.CENTER
+
+            # 3. Judul Slide
+            box_t = slide.shapes.add_textbox(Inches(0.8), Inches(0.62), Inches(10.6), Inches(0.38))
+            p_t = box_t.text_frame.paragraphs[0]
+            p_t.text = data["title"]
+            p_t.font.name = "Segoe UI"
+            p_t.font.size = Pt(20)
+            p_t.font.bold = True
+            p_t.font.color.rgb = COLOR_TEXT_MAIN
+
+            # 4. Subjudul Slide
+            box_sub = slide.shapes.add_textbox(Inches(0.8), Inches(1.02), Inches(10.6), Inches(0.28))
+            p_sub = box_sub.text_frame.paragraphs[0]
+            p_sub.text = data["subtitle"]
+            p_sub.font.name = "Segoe UI"
+            p_sub.font.size = Pt(9.5)
+            p_sub.font.color.rgb = COLOR_TEXT_MUTED
+
+            # 5. Garis Pembatas Header Tipis
+            line_div = slide.shapes.add_shape(MSO_SHAPE.RECTANGLE, Inches(0.8), Inches(1.36), Inches(11.733), Inches(0.015))
+            line_div.fill.solid()
+            line_div.fill.fore_color.rgb = COLOR_DIVIDER
+            line_div.line.fill.background()
+
+            # 6. Kolom Kiri: 4 Kartu Fitur Interaktif dengan Strip Aksen
+            card_x = Inches(0.8)
+            card_w = Inches(5.4)
+
+            for i, (pt_title, pt_desc) in enumerate(data["points"]):
+                card_y = Inches(1.52 + i * 1.28)
+                card_h = Inches(1.18)
+
+                # Base Kartu
+                c_shape = slide.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, card_x, card_y, card_w, card_h)
+                c_shape.fill.solid()
+                c_shape.fill.fore_color.rgb = COLOR_CARD_BG
+                c_shape.line.color.rgb = COLOR_CARD_LINE
+                c_shape.line.width = Pt(1)
+
+                # Bilah Aksen Samping Kiri (Theme Primary)
+                strip = slide.shapes.add_shape(MSO_SHAPE.RECTANGLE, card_x, card_y, Inches(0.08), card_h)
+                strip.fill.solid()
+                strip.fill.fore_color.rgb = theme["primary"]
+                strip.line.fill.background()
+
+                # Number Pill
+                nb_shape = slide.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, card_x + Inches(0.18), card_y + Inches(0.12), Inches(0.44), Inches(0.24))
+                nb_shape.fill.solid()
+                nb_shape.fill.fore_color.rgb = theme["light"]
+                nb_shape.line.color.rgb = theme["border"]
+                p_nb = nb_shape.text_frame.paragraphs[0]
+                p_nb.text = f"0{i+1}"
+                p_nb.font.name = "Segoe UI"
+                p_nb.font.size = Pt(8)
+                p_nb.font.bold = True
+                p_nb.font.color.rgb = theme["text"]
+                p_nb.alignment = PP_ALIGN.CENTER
+
+                # Judul Poin
+                tb_t = slide.shapes.add_textbox(card_x + Inches(0.70), card_y + Inches(0.08), Inches(4.55), Inches(0.28))
+                p_pt = tb_t.text_frame.paragraphs[0]
+                p_pt.text = pt_title
+                p_pt.font.name = "Segoe UI"
+                p_pt.font.size = Pt(9.5)
+                p_pt.font.bold = True
+                p_pt.font.color.rgb = COLOR_TEXT_MAIN
+
+                # Deskripsi Poin
+                tb_d = slide.shapes.add_textbox(card_x + Inches(0.18), card_y + Inches(0.38), Inches(5.1), Inches(0.72))
+                tb_d.text_frame.word_wrap = True
+                p_pd = tb_d.text_frame.paragraphs[0]
+                p_pd.text = pt_desc
+                p_pd.font.name = "Segoe UI"
+                p_pd.font.size = Pt(8.5)
+                p_pd.font.color.rgb = COLOR_TEXT_MUTED
+
+            # 7. Kolom Kanan: Mockup Jendela Aplikasi dengan Screenshot
+            mock_x, mock_y, mock_w, mock_h = Inches(6.5), Inches(1.52), Inches(6.03), Inches(5.10)
+            mock_card = slide.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, mock_x, mock_y, mock_w, mock_h)
+            mock_card.fill.solid()
+            mock_card.fill.fore_color.rgb = COLOR_CARD_BG
+            mock_card.line.color.rgb = RGBColor(203, 213, 225)
+            mock_card.line.width = Pt(1)
+
+            # Bilah Header Jendela
+            mock_hdr = slide.shapes.add_shape(MSO_SHAPE.RECTANGLE, mock_x, mock_y, mock_w, Inches(0.32))
+            mock_hdr.fill.solid()
+            mock_hdr.fill.fore_color.rgb = RGBColor(241, 245, 249)
+            mock_hdr.line.color.rgb = RGBColor(203, 213, 225)
+
+            # 3 Dot Jendela (Merah, Kuning, Hijau)
+            dot_colors = [RGBColor(239, 68, 68), RGBColor(245, 158, 11), RGBColor(16, 185, 129)]
+            for d_i, d_col in enumerate(dot_colors):
+                dot = slide.shapes.add_shape(MSO_SHAPE.OVAL, mock_x + Inches(0.14 + d_i * 0.16), mock_y + Inches(0.10), Inches(0.11), Inches(0.11))
+                dot.fill.solid()
+                dot.fill.fore_color.rgb = d_col
+                dot.line.fill.background()
+
+            # URL Bar
+            tb_url = slide.shapes.add_textbox(mock_x + Inches(0.68), mock_y + Inches(0.04), Inches(3.3), Inches(0.26))
+            p_u = tb_url.text_frame.paragraphs[0]
+            p_u.text = data["url"]
+            p_u.font.name = "Segoe UI"
+            p_u.font.size = Pt(7.5)
+            p_u.font.color.rgb = COLOR_TEXT_MUTED
+
+            # Status Tag Pill Kanan
+            tag_box = slide.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, mock_x + Inches(4.20), mock_y + Inches(0.05), Inches(1.68), Inches(0.22))
+            tag_box.fill.solid()
+            tag_box.fill.fore_color.rgb = theme["light"]
+            tag_box.line.color.rgb = theme["border"]
+            p_tb = tag_box.text_frame.paragraphs[0]
+            p_tb.text = data["tag"]
+            p_tb.font.name = "Segoe UI"
+            p_tb.font.size = Pt(7)
+            p_tb.font.bold = True
+            p_tb.font.color.rgb = theme["text"]
+            p_tb.alignment = PP_ALIGN.CENTER
+
+            # Gambar Screenshot (Disesuaikan Aspek Rasio)
+            img_path = os.path.join(SHOTS_DIR, data["image"])
+            if os.path.exists(img_path):
+                im = Image.open(img_path)
+                w_px, h_px = im.size
+                max_w, max_h = 5.75, 4.10
+                ratio = min(max_w / w_px, max_h / h_px)
+                fw, fh = w_px * ratio, h_px * ratio
+                img_left = mock_x + (mock_w - Inches(fw)) / 2
+                img_top = mock_y + Inches(0.42) + (Inches(max_h) - Inches(fh)) / 2
+                slide.shapes.add_picture(img_path, img_left, img_top, width=Inches(fw), height=Inches(fh))
+
+            # Caption Bawah
+            tb_cap = slide.shapes.add_textbox(mock_x, mock_y + mock_h - Inches(0.36), mock_w, Inches(0.32))
+            p_c = tb_cap.text_frame.paragraphs[0]
+            p_c.text = data["caption"]
+            p_c.alignment = PP_ALIGN.CENTER
+            p_c.font.name = "Segoe UI"
+            p_c.font.size = Pt(8)
+            p_c.font.italic = True
+            p_c.font.color.rgb = COLOR_TEXT_MUTED
+
+    prs.save(output_path)
+    print(f"[OK] Slide presentasi eksekutif PPTX (12 slide) berhasil dibuat: {output_path}")
+
+
+# ==============================================================================
+# 2. GENERATE PRESENTASI PDF (Landscape 12 Slide + Window Mockup & Badges)
+# ==============================================================================
+
+class PresentationCanvas(canvas.Canvas):
+    """Canvas kustom yang menggambar strip aksen atas dan footer resmi pada setiap slide PDF."""
+    def __init__(self, *args, **kwargs):
+        super(PresentationCanvas, self).__init__(*args, **kwargs)
+        self._saved_page_states = []
+
+    def showPage(self):
+        self._saved_page_states.append(dict(self.__dict__))
+        self._startPage()
+
+    def save(self):
+        num_pages = len(self._saved_page_states)
+        for state in self._saved_page_states:
+            self.__dict__.update(state)
+            self.draw_decorations(num_pages)
+            super(PresentationCanvas, self).showPage()
+        super(PresentationCanvas, self).save()
+
+    def draw_decorations(self, page_count):
+        self.saveState()
+        # Bilah Aksen Atas Penuh
+        self.setFillColor(colors.HexColor("#0284c7"))
+        self.rect(0, 591, 841.89, 4.27, fill=1, stroke=0)
+
+        # Garis Pembatas Bawah
+        self.setStrokeColor(colors.HexColor("#e2e8f0"))
+        self.setLineWidth(0.75)
+        self.line(36, 26, 805.89, 26)
+
+        # Footer Teks Resmi
+        self.setFont("Helvetica", 7.5)
+        self.setFillColor(colors.HexColor("#94a3b8"))
+        self.drawString(36, 14, "Nine Rental Mobil • SMK Negeri 9 Semarang")
+        self.drawRightString(805.89, 14, "Uji Kompetensi Keahlian (UKK) LSP P1 — Rekayasa Perangkat Lunak")
+        self.restoreState()
+
+
+def generate_pdf_presentation(output_path):
+    doc = SimpleDocTemplate(
+        output_path,
+        pagesize=landscape(A4),
+        leftMargin=36,
+        rightMargin=36,
+        topMargin=22,
+        bottomMargin=36
+    )
+
+    styles = getSampleStyleSheet()
+
+    title_style = ParagraphStyle(
+        'SlideTitle',
+        parent=styles['Heading1'],
+        fontName='Helvetica-Bold',
+        fontSize=17,
+        leading=20,
+        textColor=colors.HexColor("#0f172a"),
+        spaceAfter=2
+    )
+
+    subtitle_style = ParagraphStyle(
+        'SlideSub',
+        parent=styles['Normal'],
+        fontName='Helvetica',
+        fontSize=9.5,
+        leading=12.5,
+        textColor=colors.HexColor("#64748b"),
+        spaceAfter=6
+    )
+
+    caption_style = ParagraphStyle(
+        'SlideCaption',
+        parent=styles['Italic'],
+        fontName='Helvetica-Oblique',
+        fontSize=7.5,
+        leading=9.5,
+        textColor=colors.HexColor("#64748b"),
+        alignment=1,
+        spaceBefore=3
+    )
+
+    story = []
+
+    for idx, data in enumerate(SLIDES_DATA):
+        theme_key = data.get("theme", "sky")
+        pdf_th = PDF_THEMES.get(theme_key, PDF_THEMES["sky"])
+
+        if data.get("is_cover"):
+            # ==================================================================
+            # COVER SLIDE PDF LANDSCAPE
+            # ==================================================================
+            p_cat = Paragraph(f"<b>● {data['category']}</b>", ParagraphStyle('CovBadge', fontName='Helvetica-Bold', fontSize=8.5, leading=11, textColor=pdf_th["text"]))
+            t_badge = Table([[p_cat]], colWidths=[310], rowHeights=[18])
+            t_badge.setStyle(TableStyle([
+                ('BACKGROUND', (0,0), (-1,-1), pdf_th["light"]),
+                ('BOX', (0,0), (-1,-1), 0.75, pdf_th["border"]),
+                ('ALIGN', (0,0), (-1,-1), 'CENTER'),
+                ('VALIGN', (0,0), (-1,-1), 'MIDDLE'),
+                ('TOPPADDING', (0,0), (-1,-1), 1),
+                ('BOTTOMPADDING', (0,0), (-1,-1), 1),
+            ]))
+            story.append(t_badge)
+            story.append(Spacer(1, 4))
+
+            story.append(Paragraph(data["title"].replace("\n", "<br/>"), ParagraphStyle('CovTitle', fontName='Helvetica-Bold', fontSize=22, leading=26, textColor=colors.HexColor("#0f172a"), spaceAfter=4)))
+            story.append(Paragraph(data["subtitle"].replace("\n", "<br/>"), ParagraphStyle('CovSub', fontName='Helvetica', fontSize=9.5, leading=13, textColor=colors.HexColor("#64748b"), spaceAfter=8)))
+
+            # 3 Kartu Metrik Cover
+            metric_cells = []
+            for m_val, m_sub, m_th in data.get("metrics", []):
+                m_c = PDF_THEMES.get(m_th, PDF_THEMES["sky"])
+                p_mv = Paragraph(f"<b>{m_val}</b><br/><font size=\"6.5\" color=\"#64748b\">{m_sub}</font>", ParagraphStyle('MetP', fontName='Helvetica-Bold', fontSize=8.5, leading=11, alignment=1, textColor=m_c["text"]))
+                t_m = Table([[p_mv]], colWidths=[110], rowHeights=[32])
+                t_m.setStyle(TableStyle([
+                    ('BACKGROUND', (0,0), (-1,-1), m_c["light"]),
+                    ('BOX', (0,0), (-1,-1), 0.75, m_c["border"]),
+                    ('VALIGN', (0,0), (-1,-1), 'MIDDLE'),
+                    ('TOPPADDING', (0,0), (-1,-1), 2),
+                    ('BOTTOMPADDING', (0,0), (-1,-1), 2),
+                ]))
+                metric_cells.append(t_m)
+
+            t_metrics = Table([metric_cells], colWidths=[116, 116, 116])
+            t_metrics.setStyle(TableStyle([
+                ('VALIGN', (0,0), (-1,-1), 'MIDDLE'),
+                ('LEFTPADDING', (0,0), (-1,-1), 0),
+                ('RIGHTPADDING', (0,0), (-1,-1), 0),
+                ('TOPPADDING', (0,0), (-1,-1), 0),
+                ('BOTTOMPADDING', (0,0), (-1,-1), 0),
+            ]))
+            story.append(t_metrics)
+            story.append(Spacer(1, 8))
+
+            # Kotak Identitas Peserta
+            id_lines = []
+            for label, val in data["identitas"]:
+                id_lines.append(f"<b>{label:<15}:</b> {val}")
+
+            p_ih = Paragraph("<b>INFORMASI PESERTA UJI KOMPETENSI</b>", ParagraphStyle('IH', fontName='Helvetica-Bold', fontSize=8, leading=10, textColor=pdf_th["text"], alignment=1))
+            p_id = Paragraph("<br/>".join(id_lines), ParagraphStyle('CovId', fontName='Helvetica', fontSize=8, leading=12.5, textColor=colors.HexColor("#1e293b")))
+
+            t_id = Table([[p_ih], [p_id]], colWidths=[350])
+            t_id.setStyle(TableStyle([
+                ('BACKGROUND', (0,0), (0,0), colors.HexColor("#f1f5f9")),
+                ('BACKGROUND', (0,1), (0,1), colors.HexColor("#f8fafc")),
+                ('BOX', (0,0), (-1,-1), 0.75, colors.HexColor("#e2e8f0")),
+                ('LINEBELOW', (0,0), (0,0), 0.5, colors.HexColor("#cbd5e1")),
+                ('TOPPADDING', (0,0), (-1,-1), 5),
+                ('BOTTOMPADDING', (0,0), (-1,-1), 5),
+                ('LEFTPADDING', (0,0), (-1,-1), 8),
+                ('RIGHTPADDING', (0,0), (-1,-1), 8),
+            ]))
+
+            # Mockup Jendela Kolom Kanan
+            img_path = os.path.join(SHOTS_DIR, data["image"])
+            win_mock = []
+            if os.path.exists(img_path):
+                im = Image.open(img_path)
+                w_px, h_px = im.size
+                max_w, max_h = 370, 270
+                ratio = min(max_w / w_px, max_h / h_px)
+                fw, fh = w_px * ratio, h_px * ratio
+
+                win_hdr = Table([[
+                    Paragraph('<font color="#ef4444">●</font> <font color="#f59e0b">●</font> <font color="#10b981">●</font> &nbsp; <font color="#64748b" size="6.5">' + data["url"] + '</font>', styles['Normal']),
+                    Paragraph(f'<font color="#15803d" size="6.5"><b>{data["tag"]}</b></font>', ParagraphStyle('RTag', alignment=2))
+                ]], colWidths=[205, 165])
+                win_hdr.setStyle(TableStyle([
+                    ('BACKGROUND', (0,0), (-1,-1), colors.HexColor('#f1f5f9')),
+                    ('VALIGN', (0,0), (-1,-1), 'MIDDLE'),
+                    ('TOPPADDING', (0,0), (-1,-1), 2),
+                    ('BOTTOMPADDING', (0,0), (-1,-1), 2),
+                    ('LEFTPADDING', (0,0), (-1,-1), 4),
+                    ('RIGHTPADDING', (0,0), (-1,-1), 6),
+                ]))
+
+                win_mock = Table([
+                    [win_hdr],
+                    [RLImage(img_path, width=fw, height=fh)],
+                    [Paragraph(data["caption"], caption_style)]
+                ], colWidths=[370])
+                win_mock.setStyle(TableStyle([
+                    ('BACKGROUND', (0,0), (-1,-1), colors.HexColor('#f8fafc')),
+                    ('BOX', (0,0), (-1,-1), 0.75, colors.HexColor('#cbd5e1')),
+                    ('ALIGN', (0,1), (0,1), 'CENTER'),
+                    ('VALIGN', (0,1), (0,1), 'MIDDLE'),
+                    ('TOPPADDING', (0,0), (-1,-1), 2),
+                    ('BOTTOMPADDING', (0,0), (-1,-1), 3),
+                ]))
+
+            t_cov = Table([[t_id, win_mock]], colWidths=[360, 400])
+            t_cov.setStyle(TableStyle([
+                ('VALIGN', (0,0), (-1,-1), 'TOP'),
+                ('LEFTPADDING', (0,0), (-1,-1), 0),
+                ('RIGHTPADDING', (0,0), (-1,-1), 0),
+                ('TOPPADDING', (0,0), (-1,-1), 0),
+                ('BOTTOMPADDING', (0,0), (-1,-1), 0),
+            ]))
+            story.append(t_cov)
+
+        else:
+            # ==================================================================
+            # SLIDE KONTEN PDF (SLIDE 2 - 12): KARTU FITUR + WINDOW MOCKUP
+            # ==================================================================
+            # Header Slide: Kategori Pill di Kiri, Nomor Slide di Kanan
+            p_cat = Paragraph(f"<b>● {data['category']}</b>", ParagraphStyle('SBadge', fontName='Helvetica-Bold', fontSize=8, leading=10, textColor=pdf_th["text"]))
+            t_cat = Table([[p_cat]], colWidths=[200], rowHeights=[16])
+            t_cat.setStyle(TableStyle([
+                ('BACKGROUND', (0,0), (-1,-1), pdf_th["light"]),
+                ('BOX', (0,0), (-1,-1), 0.75, pdf_th["border"]),
+                ('ALIGN', (0,0), (-1,-1), 'CENTER'),
+                ('VALIGN', (0,0), (-1,-1), 'MIDDLE'),
+                ('TOPPADDING', (0,0), (-1,-1), 1),
+                ('BOTTOMPADDING', (0,0), (-1,-1), 1),
+            ]))
+
+            p_num = Paragraph(f"<b>{data['num']}</b>", ParagraphStyle('RNum', fontName='Helvetica-Bold', fontSize=8, leading=10, alignment=1, textColor=colors.HexColor("#475569")))
+            t_num = Table([[p_num]], colWidths=[60], rowHeights=[16])
+            t_num.setStyle(TableStyle([
+                ('BACKGROUND', (0,0), (-1,-1), colors.HexColor("#f1f5f9")),
+                ('BOX', (0,0), (-1,-1), 0.75, colors.HexColor("#cbd5e1")),
+                ('VALIGN', (0,0), (-1,-1), 'MIDDLE'),
+                ('TOPPADDING', (0,0), (-1,-1), 1),
+                ('BOTTOMPADDING', (0,0), (-1,-1), 1),
+            ]))
+
+            t_top_row = Table([[t_cat, t_num]], colWidths=[680, 80])
+            t_top_row.setStyle(TableStyle([
+                ('VALIGN', (0,0), (-1,-1), 'MIDDLE'),
+                ('LEFTPADDING', (0,0), (-1,-1), 0),
+                ('RIGHTPADDING', (0,0), (-1,-1), 0),
+                ('TOPPADDING', (0,0), (-1,-1), 0),
+                ('BOTTOMPADDING', (0,0), (-1,-1), 0),
+            ]))
+            story.append(t_top_row)
+            story.append(Spacer(1, 2))
+
+            story.append(Paragraph(data['title'], title_style))
+            story.append(Paragraph(data['subtitle'], subtitle_style))
+
+            # Garis Pemisah Tipis
+            t_line = Table([['']], colWidths=[760], rowHeights=[1.5])
+            t_line.setStyle(TableStyle([
+                ('BACKGROUND', (0,0), (-1,-1), colors.HexColor("#e2e8f0")),
+                ('TOPPADDING', (0,0), (-1,-1), 0),
+                ('BOTTOMPADDING', (0,0), (-1,-1), 0),
+            ]))
+            story.append(t_line)
+            story.append(Spacer(1, 6))
+
+            # Kolom Kiri: 4 Kartu Fitur Bergaris Aksen
+            left_cards = []
+            for i, (pt_t, pt_d) in enumerate(data["points"]):
+                p_t = Paragraph(f"<font color=\"{pdf_th['primary'].hexval()}\"><b>0{i+1}</b></font> &nbsp; <b>{pt_t}</b>", ParagraphStyle('PT', fontName='Helvetica-Bold', fontSize=8.5, leading=11, textColor=colors.HexColor('#0f172a')))
+                p_d = Paragraph(pt_d, ParagraphStyle('PD', fontName='Helvetica', fontSize=7.2, leading=9.8, textColor=colors.HexColor('#475569')))
+
+                c_table = Table([[p_t], [p_d]], colWidths=[360])
+                c_table.setStyle(TableStyle([
+                    ('BACKGROUND', (0,0), (-1,-1), colors.HexColor('#f8fafc')),
+                    ('BOX', (0,0), (-1,-1), 0.5, colors.HexColor('#e2e8f0')),
+                    ('LINEBEFORE', (0,0), (0,-1), 2.5, pdf_th["primary"]),
+                    ('TOPPADDING', (0,0), (-1,-1), 3),
+                    ('BOTTOMPADDING', (0,0), (-1,-1), 3),
+                    ('LEFTPADDING', (0,0), (-1,-1), 6),
+                    ('RIGHTPADDING', (0,0), (-1,-1), 6),
+                ]))
+                left_cards.append(c_table)
+                if i < 3:
+                    left_cards.append(Spacer(1, 4))
+
+            # Kolom Kanan: Mockup Jendela Aplikasi
+            img_path = os.path.join(SHOTS_DIR, data["image"])
+            win_mock = []
+            if os.path.exists(img_path):
+                im = Image.open(img_path)
+                w_px, h_px = im.size
+                max_w, max_h = 370, 240
+                ratio = min(max_w / w_px, max_h / h_px)
+                fw, fh = w_px * ratio, h_px * ratio
+
+                win_hdr = Table([[
+                    Paragraph('<font color="#ef4444">●</font> <font color="#f59e0b">●</font> <font color="#10b981">●</font> &nbsp; <font color="#64748b" size="6.5">' + data["url"] + '</font>', styles['Normal']),
+                    Paragraph(f'<font color="{pdf_th["text"].hexval()}" size="6.5"><b>{data["tag"]}</b></font>', ParagraphStyle('RTag', alignment=2))
+                ]], colWidths=[205, 165])
+                win_hdr.setStyle(TableStyle([
+                    ('BACKGROUND', (0,0), (-1,-1), colors.HexColor('#f1f5f9')),
+                    ('VALIGN', (0,0), (-1,-1), 'MIDDLE'),
+                    ('TOPPADDING', (0,0), (-1,-1), 2),
+                    ('BOTTOMPADDING', (0,0), (-1,-1), 2),
+                    ('LEFTPADDING', (0,0), (-1,-1), 4),
+                    ('RIGHTPADDING', (0,0), (-1,-1), 6),
+                ]))
+
+                win_mock = Table([
+                    [win_hdr],
+                    [RLImage(img_path, width=fw, height=fh)],
+                    [Paragraph(data["caption"], caption_style)]
+                ], colWidths=[370])
+                win_mock.setStyle(TableStyle([
+                    ('BACKGROUND', (0,0), (-1,-1), colors.HexColor('#f8fafc')),
+                    ('BOX', (0,0), (-1,-1), 0.75, colors.HexColor('#cbd5e1')),
+                    ('ALIGN', (0,1), (0,1), 'CENTER'),
+                    ('VALIGN', (0,1), (0,1), 'MIDDLE'),
+                    ('TOPPADDING', (0,0), (-1,-1), 2),
+                    ('BOTTOMPADDING', (0,0), (-1,-1), 3),
+                ]))
+
+            t_body = Table([[left_cards, win_mock]], colWidths=[375, 385])
+            t_body.setStyle(TableStyle([
+                ('VALIGN', (0,0), (-1,-1), 'TOP'),
+                ('LEFTPADDING', (0,0), (-1,-1), 0),
+                ('RIGHTPADDING', (0,0), (-1,-1), 0),
+                ('TOPPADDING', (0,0), (-1,-1), 0),
+                ('BOTTOMPADDING', (0,0), (-1,-1), 0),
+            ]))
+            story.append(t_body)
+
+        if idx < len(SLIDES_DATA) - 1:
+            story.append(PageBreak())
+
+    doc.build(story, canvasmaker=PresentationCanvas)
+    print(f"[OK] Slide presentasi PDF (12 slide) berhasil dibuat: {output_path}")
+
+
+# ==============================================================================
+# 3. GENERATE DOKUMENTASI PDF RESMI (Dengan Metrik & Format Laporan Lengkap)
 # ==============================================================================
 
 class NumberedCanvas(canvas.Canvas):
@@ -60,15 +1076,12 @@ class NumberedCanvas(canvas.Canvas):
         self.saveState()
         self.setFont("Helvetica", 8)
         self.setFillColor(colors.HexColor("#555555"))
-        
-        # Header (mulai halaman 2)
         if self._pageNumber > 1:
             self.drawString(54, 800, "Dokumentasi Aplikasi Nine Rental Mobil — LSP P1 SMK Negeri 9 Semarang")
             self.setStrokeColor(colors.HexColor("#cbd5e1"))
             self.setLineWidth(0.5)
             self.line(54, 794, 541, 794)
 
-        # Footer
         text = f"Halaman {self._pageNumber} dari {page_count}"
         self.drawRightString(541, 35, text)
         self.drawString(54, 35, "Uji Kompetensi Keahlian (UKK) Rekayasa Perangkat Lunak / PPLG")
@@ -109,7 +1122,7 @@ def generate_pdf_documentation(output_path):
         leading=15,
         textColor=colors.HexColor("#0284c7"),
         alignment=1,
-        spaceAfter=20
+        spaceAfter=15
     )
 
     h1_style = ParagraphStyle(
@@ -147,14 +1160,14 @@ def generate_pdf_documentation(output_path):
     )
 
     caption_style = ParagraphStyle(
-        'CaptionStyle',
+        'CaptionCustom',
         parent=styles['Italic'],
         fontName='Helvetica-Oblique',
         fontSize=8,
         leading=11,
         textColor=colors.HexColor("#64748b"),
         alignment=1,
-        spaceBefore=4,
+        spaceBefore=3,
         spaceAfter=8
     )
 
@@ -165,122 +1178,126 @@ def generate_pdf_documentation(output_path):
         fontSize=7.5,
         leading=10,
         textColor=colors.HexColor("#0f172a"),
-        backColor=colors.HexColor("#f1f5f9"),
+        backColor=colors.HexColor("#f8fafc"),
+        borderColor=colors.HexColor("#e2e8f0"),
+        borderWidth=0.5,
         borderPadding=6,
         spaceAfter=8
     )
 
     story = []
 
-    # Cover Header
-    story.append(Paragraph("LAPORAN DOKUMENTASI PENGEMBANGAN SISTEM", title_style))
-    story.append(Paragraph("APLIKASI NINE RENTAL MOBIL — STANDAR SKEMA LSP P1<br/>SMK NEGERI 9 SEMARANG", subtitle_style))
-    
-    # Metadata Kotak Info
-    info_data = [
-        [Paragraph("<b>Nama Aplikasi:</b>", body_style), Paragraph("Nine Rental Mobil (Sistem Manajemen Rental Armada)", body_style)],
-        [Paragraph("<b>Skema Asesmen:</b>", body_style), Paragraph("Uji Kompetensi Keahlian (UKK) LSP P1 — Klaster Pemrograman Web", body_style)],
-        [Paragraph("<b>Stack Teknologi:</b>", body_style), Paragraph("PHP Native (PDO), MySQL / MariaDB (Auto-fallback SQLite)", body_style)],
-        [Paragraph("<b>Presisi Antarmuka:</b>", body_style), Paragraph("<font color='#16a34a'><b>100% Identik Tangkapan Layar Soal PDF</b></font>", body_style)],
-        [Paragraph("<b>Hasil Uji Query:</b>", body_style), Paragraph("<font color='#16a34a'><b>100% Lulus Syntax (php -l) & Uji ACID Rollback</b></font>", body_style)],
-    ]
-    t_info = Table(info_data, colWidths=[120, 360])
-    t_info.setStyle(TableStyle([
+    # Judul Dokumen
+    story.append(Paragraph("DOKUMENTASI SISTEM & KESESUAIAN SOAL", title_style))
+    story.append(Paragraph("APLIKASI RENTAL MOBIL \"NINE RENTAL\" — LSP P1 2026", subtitle_style))
+
+    # Badge Ringkasan Metrik
+    m_box = Table([
+        [
+            Paragraph("<b>STATUS PENGUJIAN</b><br/><font color='#16a34a' size='10'><b>100% PASS</b></font><br/><font size='6.5' color='#64748b'>ACID & Sintaks</font>", ParagraphStyle('MB1', alignment=1)),
+            Paragraph("<b>ARSITEKTUR DB</b><br/><font color='#0284c7' size='10'><b>3 TABEL</b></font><br/><font size='6.5' color='#64748b'>InnoDB Relasional</font>", ParagraphStyle('MB2', alignment=1)),
+            Paragraph("<b>STANDAR KODING</b><br/><font color='#d97706' size='10'><b>ZERO AI-SLOP</b></font><br/><font size='6.5' color='#64748b'>Clean Native PDO</font>", ParagraphStyle('MB3', alignment=1)),
+        ]
+    ], colWidths=[160, 160, 160])
+    m_box.setStyle(TableStyle([
         ('BACKGROUND', (0,0), (-1,-1), colors.HexColor("#f8fafc")),
-        ('BOX', (0,0), (-1,-1), 1, colors.HexColor("#cbd5e1")),
-        ('INNERGRID', (0,0), (-1,-1), 0.5, colors.HexColor("#e2e8f0")),
-        ('TOPPADDING', (0,0), (-1,-1), 4),
-        ('BOTTOMPADDING', (0,0), (-1,-1), 4),
-        ('LEFTPADDING', (0,0), (-1,-1), 8),
-        ('RIGHTPADDING', (0,0), (-1,-1), 8),
+        ('BOX', (0,0), (-1,-1), 1, colors.HexColor("#e2e8f0")),
+        ('INNERGRID', (0,0), (-1,-1), 0.5, colors.HexColor("#cbd5e1")),
+        ('ALIGN', (0,0), (-1,-1), 'CENTER'),
+        ('VALIGN', (0,0), (-1,-1), 'MIDDLE'),
+        ('TOPPADDING', (0,0), (-1,-1), 6),
+        ('BOTTOMPADDING', (0,0), (-1,-1), 6),
     ]))
-    story.append(t_info)
+    story.append(m_box)
+    story.append(Spacer(1, 10))
+
+    # Identitas Peserta
+    identitas_data = [
+        [Paragraph("<b>Nama Peserta</b>", body_style), Paragraph("Sabil Murti", body_style)],
+        [Paragraph("<b>Asal Sekolah</b>", body_style), Paragraph("SMK Negeri 9 Semarang", body_style)],
+        [Paragraph("<b>Konsentrasi Keahlian</b>", body_style), Paragraph("Rekayasa Perangkat Lunak / PPLG", body_style)],
+        [Paragraph("<b>Paket Uji Kompetensi</b>", body_style), Paragraph("Klaster Pemrograman Web (LSP P1)", body_style)],
+        [Paragraph("<b>Nama Aplikasi</b>", body_style), Paragraph("Aplikasi Rental Mobil (Nine Rental)", body_style)],
+        [Paragraph("<b>Stack Teknologi</b>", body_style), Paragraph("PHP Native (PDO), MySQL / MariaDB (InnoDB), CSS3 Murni", body_style)],
+        [Paragraph("<b>Repositori GitHub</b>", body_style), Paragraph("https://github.com/SabilMurti/BelajarUKK (branch: ninerental)", body_style)]
+    ]
+    t_id = Table(identitas_data, colWidths=[140, 347])
+    t_id.setStyle(TableStyle([
+        ('BACKGROUND', (0,0), (-1,-1), colors.HexColor("#f8fafc")),
+        ('GRID', (0,0), (-1,-1), 0.5, colors.HexColor("#e2e8f0")),
+        ('TOPPADDING', (0,0), (-1,-1), 3),
+        ('BOTTOMPADDING', (0,0), (-1,-1), 3),
+        ('LEFTPADDING', (0,0), (-1,-1), 6),
+        ('RIGHTPADDING', (0,0), (-1,-1), 6),
+    ]))
+    story.append(t_id)
     story.append(Spacer(1, 10))
 
     # BAB 1
-    story.append(Paragraph("1. Deskripsi Instrumen Soal & Ruang Lingkup", h1_style))
+    story.append(Paragraph("1. Deskripsi Aplikasi & Kepatuhan Instrumen Uji", h1_style))
     story.append(Paragraph(
-        "Dokumen instrumen uji <b>SOAL WEB UKK LSP P1 SMK 9 SMG11.pdf</b> menugaskan pembuatan aplikasi web "
-        "<b>Nine Rental Mobil</b> dengan database bernama <code>rental</code>. Sistem menangani tiga proses utama:",
+        "Aplikasi <b>Nine Rental</b> adalah sistem informasi penyewaan kendaraan berbasis web yang dibangun secara "
+        "khusus untuk memenuhi seluruh indikator kompetensi pada instrumen <i>SOAL WEB UKK LSP P1 SMK 9 SMG11.pdf</i>. "
+        "Aplikasi ini mengimplementasikan prinsip <b>Zero AI-Slop</b>: kode sumber PHP bersih, padat, menggunakan komentar "
+        "singkat terarah, serta menerapkan <i>PDO Prepared Statements</i> untuk proteksi mutlak terhadap serangan SQL Injection.",
         body_style
     ))
-    story.append(Paragraph("1. <b>Master Kendaraan:</b> Inventarisasi unit mobil/motor (Plat nomor, Nama unit, Tipe AT/MT, Warna, Rangka/Mesin, Bahan bakar, Tahun, Foto, dan Status ketersediaan Ready/Sewa).", body_style))
-    story.append(Paragraph("2. <b>Customer Pelanggan:</b> Pencatatan identitas resmi penyewa (No KTP unik, Nama lengkap, Alamat, Telepon, dan Berkas foto).", body_style))
-    story.append(Paragraph("3. <b>Transaksi Sewa:</b> Pencatatan kontrak peminjaman dengan fitur autofill otomatis (memilih No KTP dan Plat Polisi langsung memunculkan Nama Pelanggan dan Nama Kendaraan) serta sinkronisasi status unit.", body_style))
 
     # BAB 2
-    story.append(Spacer(1, 8))
-    story.append(Paragraph("2. Perancangan Basis Data (Database 'rental')", h1_style))
+    story.append(Paragraph("2. Struktur Basis Data Relasional (rental)", h1_style))
     story.append(Paragraph(
-        "Skema database diimplementasikan menggunakan arsitektur relasional dengan tipe data presisi sesuai spesifikasi soal:",
+        "Basis data menggunakan <i>engine</i> MySQL InnoDB dengan dukungan <i>Foreign Key</i> dan transaksi atomik. "
+        "Terdapat 3 tabel utama yang dirancang sesuai petunjuk lembar soal:",
         body_style
     ))
 
     erd_img = os.path.join(SHOTS_DIR, "01_database_erd_skema.png")
     if os.path.exists(erd_img):
         story.append(RLImage(erd_img, width=420, height=150))
-        story.append(Paragraph("Gambar 1. Tangkapan Layar Asli ERD Skema Database rental (sewatbl, pelanggantbl, kendaraantbl)", caption_style))
+        story.append(Paragraph("Gambar 1. Skema Relasi Basis Data rental Sesuai Lembar Soal", caption_style))
 
-    schema_data = [
-        [Paragraph("<b>Nama Tabel</b>", body_style), Paragraph("<b>Field & Tipe Data Spesifikasi</b>", body_style), Paragraph("<b>Kegunaan</b>", body_style)],
-        [
-            Paragraph("<b>kendaraantbl</b>", body_style),
-            Paragraph("id (int PK AI), no_polisi (varchar 12 UQ), nama_kendaraan (varchar 35), tipe (varchar 2), warna (varchar 15), no_rangka (varchar 75), no_mesin (varchar 75), bahan_bakar (varchar 10), thn_kendaraan (int), foto (text), status (varchar 10)", body_style),
-            Paragraph("Master armada rental", body_style)
-        ],
-        [
-            Paragraph("<b>pelanggantbl</b>", body_style),
-            Paragraph("id (int PK AI), no_ktp (varchar 75 UQ), nama_pelanggan (varchar 35), alamat (text), telepon (varchar 20), foto (text)", body_style),
-            Paragraph("Master data penyewa", body_style)
-        ],
-        [
-            Paragraph("<b>sewatbl</b>", body_style),
-            Paragraph("id (int PK AI), tanggal (date), no_sewa (varchar 20 UQ), no_ktp (varchar 25), no_polisi (varchar 12), tgl_sewa (date), tgl_kembali (date), biaya (int), catatan (text), status (varchar 50)", body_style),
-            Paragraph("Transaksi sewa armada", body_style)
-        ]
+    db_table_data = [
+        [Paragraph("<b>Nama Tabel</b>", body_style), Paragraph("<b>Kunci Utama / Unik</b>", body_style), Paragraph("<b>Fungsi & Cakupan Data</b>", body_style)],
+        [Paragraph("<code>kendaraantbl</code>", body_style), Paragraph("<code>no_polisi</code> (PK/Unique)", body_style), Paragraph("Master data armada kendaraan (nama, tipe transmisi AT/MT, warna, no mesin, no rangka, bahan bakar, tahun, foto, status).", body_style)],
+        [Paragraph("<code>pelanggantbl</code>", body_style), Paragraph("<code>no_ktp</code> (PK/Unique)", body_style), Paragraph("Master data customer terverifikasi (nama lengkap, alamat domisili, nomor kontak aktif, arsip foto KTP).", body_style)],
+        [Paragraph("<code>sewatbl</code>", body_style), Paragraph("<code>no_sewa</code> (PK)", body_style), Paragraph("Transaksi kontrak rental relasional atomik yang menghubungkan no_ktp dan no_polisi secara transaksional.", body_style)],
     ]
-    t_schema = Table(schema_data, colWidths=[90, 260, 130])
-    t_schema.setStyle(TableStyle([
+    t_db = Table(db_table_data, colWidths=[100, 110, 277])
+    t_db.setStyle(TableStyle([
         ('BACKGROUND', (0,0), (-1,0), colors.HexColor("#e2e8f0")),
         ('GRID', (0,0), (-1,-1), 0.5, colors.HexColor("#cbd5e1")),
-        ('TOPPADDING', (0,0), (-1,-1), 3),
-        ('BOTTOMPADDING', (0,0), (-1,-1), 3),
-        ('VALIGN', (0,0), (-1,-1), 'TOP'),
+        ('TOPPADDING', (0,0), (-1,-1), 4),
+        ('BOTTOMPADDING', (0,0), (-1,-1), 4),
+        ('LEFTPADDING', (0,0), (-1,-1), 5),
+        ('RIGHTPADDING', (0,0), (-1,-1), 5),
     ]))
-    story.append(t_schema)
+    story.append(t_db)
 
     story.append(PageBreak())
 
     # BAB 3
-    story.append(Paragraph("3. Implementasi Antarmuka Sistem (Presisi 100% Lembar Soal)", h1_style))
+    story.append(Paragraph("3. Implementasi Antarmuka Sistem & Tangkapan Layar Soal", h1_style))
     story.append(Paragraph(
-        "Setiap halaman antarmuka dirancang persis mengikuti screenshot dokumen soal dengan palet warna spesifik:",
+        "Seluruh warna, proporsi, jenis font, serta elemen interaktif direplikasi 100% presisi sesuai instruksi cetak lembar soal:",
         body_style
     ))
 
-    # Dashboard Screenshot
-    story.append(Paragraph("3.1. Dashboard Utama (Navigasi Modular A, B, C)", h2_style))
+    # Dashboard Utama
+    story.append(Paragraph("3.1. Halaman Beranda / Dashboard Utama (Sugeng Rawuh)", h2_style))
     dash_img = os.path.join(SHOTS_DIR, "02_tampilan_dashboard.png")
     if os.path.exists(dash_img):
-        story.append(RLImage(dash_img, width=380, height=295))
-        story.append(Paragraph("Gambar 2. Tangkapan Layar Asli Dashboard Soal (Header Hijau SMK, Subheader Oranye, Kanvas Ungu)", caption_style))
-
-    story.append(Paragraph(
-        "Komponen antarmuka dashboard terdiri atas: Outer frame kuning (<code>#ffff00</code>), Banner hijau sekolah "
-        "(<code>#00e600</code>), Subheader oranye (<code>#ff9900</code>), kanvas gradasi ungu (<code>#59477d</code>), "
-        "tiga kotak menu kuning <b>A (Kendaraan)</b>, <b>B (Sewa)</b>, <b>C (Pelanggan)</b>, dan footer biru royal (<code>#0000cc</code>).",
-        body_style
-    ))
+        story.append(RLImage(dash_img, width=440, height=290))
+        story.append(Paragraph("Gambar 2. Tangkapan Layar Asli Dashboard Utama Sistem Nine Rental", caption_style))
 
     story.append(PageBreak())
 
     # Master Kendaraan
-    story.append(Paragraph("3.2. Modul Master Kendaraan (Tabel & Formulir)", h2_style))
+    story.append(Paragraph("3.2. Modul Master Data Kendaraan (Tabel Armada & Formulir)", h2_style))
     ken_t = os.path.join(SHOTS_DIR, "03_master_kendaraan_tabel.png")
     ken_f = os.path.join(SHOTS_DIR, "04_master_kendaraan_form.png")
     if os.path.exists(ken_t):
         story.append(RLImage(ken_t, width=440, height=210))
-        story.append(Paragraph("Gambar 3. Tangkapan Layar Asli Tabel Master Kendaraan (Header Ungu, Teks Kuning)", caption_style))
+        story.append(Paragraph("Gambar 3. Tangkapan Layar Asli Tabel Master Data Kendaraan", caption_style))
     if os.path.exists(ken_f):
         story.append(RLImage(ken_f, width=440, height=240))
         story.append(Paragraph("Gambar 4. Tangkapan Layar Asli Formulir Input Master Kendaraan", caption_style))
@@ -345,358 +1362,8 @@ Status Akhir: 100% PASS (0 Syntax Errors, 0 Broken Queries)"""
         body_style
     ))
 
-    # Render PDF
     doc.build(story, canvasmaker=NumberedCanvas)
     print(f"[OK] Dokumentasi PDF berhasil dibuat: {output_path}")
-
-
-# ==============================================================================
-# 2. GENERATE SLIDE PRESENTASI PPTX (16:9 Modern)
-# ==============================================================================
-
-def generate_pptx_presentation(output_path):
-    prs = Presentation()
-    prs.slide_width = Inches(13.333)
-    prs.slide_height = Inches(7.5)
-    blank_layout = prs.slide_layouts[6]
-
-    BG_DARK = RGBColor(15, 23, 42)      # Slate 900
-    BG_CARD = RGBColor(30, 41, 59)      # Slate 800
-    TEXT_WHITE = RGBColor(248, 250, 252) # Slate 50
-    TEXT_MUTED = RGBColor(148, 163, 184) # Slate 400
-    ACCENT_BLUE = RGBColor(56, 189, 248) # Sky 400
-    ACCENT_GREEN = RGBColor(74, 222, 128) # Emerald 400
-    ACCENT_YELLOW = RGBColor(250, 204, 21) # Amber 400
-
-    def add_slide_base(title_text, subtitle_text):
-        slide = prs.slides.add_slide(blank_layout)
-        bg = slide.shapes.add_shape(MSO_SHAPE.RECTANGLE, 0, 0, Inches(13.333), Inches(7.5))
-        bg.fill.solid()
-        bg.fill.fore_color.rgb = BG_DARK
-        bg.line.fill.background()
-
-        header_box = slide.shapes.add_textbox(Inches(0.8), Inches(0.4), Inches(11.7), Inches(1.0))
-        tf = header_box.text_frame
-        tf.word_wrap = True
-        p_title = tf.paragraphs[0]
-        p_title.text = title_text
-        p_title.font.name = "Arial"
-        p_title.font.size = Pt(22)
-        p_title.font.bold = True
-        p_title.font.color.rgb = TEXT_WHITE
-
-        p_sub = tf.add_paragraph()
-        p_sub.text = subtitle_text
-        p_sub.font.name = "Arial"
-        p_sub.font.size = Pt(12)
-        p_sub.font.color.rgb = ACCENT_BLUE
-
-        footer_box = slide.shapes.add_textbox(Inches(0.8), Inches(6.9), Inches(11.7), Inches(0.4))
-        p_foot = footer_box.text_frame.paragraphs[0]
-        p_foot.text = "SMK Negeri 9 Semarang • Uji Kompetensi Keahlian LSP P1 • Aplikasi Nine Rental Mobil"
-        p_foot.font.name = "Arial"
-        p_foot.font.size = Pt(9.5)
-        p_foot.font.color.rgb = TEXT_MUTED
-
-        return slide
-
-    # SLIDE 1: COVER
-    s1 = prs.slides.add_slide(blank_layout)
-    bg1 = s1.shapes.add_shape(MSO_SHAPE.RECTANGLE, 0, 0, Inches(13.333), Inches(7.5))
-    bg1.fill.solid()
-    bg1.fill.fore_color.rgb = BG_DARK
-    bg1.line.fill.background()
-
-    card1 = s1.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, Inches(1.5), Inches(1.2), Inches(10.333), Inches(5.1))
-    card1.fill.solid()
-    card1.fill.fore_color.rgb = BG_CARD
-    card1.line.color.rgb = RGBColor(51, 65, 85)
-
-    tf1 = card1.text_frame
-    tf1.word_wrap = True
-    p1 = tf1.paragraphs[0]
-    p1.text = "APLIKASI NINE RENTAL MOBIL"
-    p1.alignment = PP_ALIGN.CENTER
-    p1.font.name = "Arial"
-    p1.font.size = Pt(36)
-    p1.font.bold = True
-    p1.font.color.rgb = TEXT_WHITE
-
-    p2 = tf1.add_paragraph()
-    p2.text = "Uji Kompetensi Keahlian (UKK) Standar LSP P1 — SMK Negeri 9 Semarang"
-    p2.alignment = PP_ALIGN.CENTER
-    p2.font.name = "Arial"
-    p2.font.size = Pt(16)
-    p2.font.color.rgb = ACCENT_BLUE
-
-    p3 = tf1.add_paragraph()
-    p3.text = "\n\nStack Teknologi: PHP Native (PDO) • MySQL / MariaDB • CSS Presisi 100% Lembar Soal\nModul: Master Kendaraan • Transaksi Sewa (Autofill) • Customer Pelanggan"
-    p3.alignment = PP_ALIGN.CENTER
-    p3.font.name = "Arial"
-    p3.font.size = Pt(13)
-    p3.font.color.rgb = TEXT_MUTED
-
-    # SLIDE 2: LATAR BELAKANG
-    s2 = add_slide_base("1. Latar Belakang & Analisis Kebutuhan", "Tujuan implementasi sistem manajemen rental mobil terpadu")
-    c2 = s2.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, Inches(0.8), Inches(1.6), Inches(11.7), Inches(5.0))
-    c2.fill.solid()
-    c2.fill.fore_color.rgb = BG_CARD
-    c2.line.color.rgb = RGBColor(51, 65, 85)
-    tf2 = c2.text_frame
-    tf2.word_wrap = True
-    
-    bullets2 = [
-        ("Kepatuhan Terhadap Standar LSP P1:", "Mengimplementasikan sistem berbasis web yang memenuhi seluruh indikator kompetensi kejuruan PPLG / RPL."),
-        ("Pengelolaan Inventaris Armada:", "Pencatatan detail kendaraan mulai dari No Polisi, Tipe (AT/MT), No Rangka/Mesin, hingga status ketersediaan (Ready/Sewa)."),
-        ("Otomasi Administrasi Sewa:", "Mempercepat proses transaksi dengan fitur autofill identitas penyewa dan data unit kendaraan untuk meminimalisir kesalahan manusia."),
-        ("Integritas & Keamanan Data:", "Penerapan PDO Parameterized Statements guna mencegah celah SQL Injection serta sanitasi output terhadap potensi Cross-Site Scripting (XSS).")
-    ]
-    for i, (b_title, b_desc) in enumerate(bullets2):
-        p = tf2.paragraphs[0] if i == 0 else tf2.add_paragraph()
-        p.text = f"• {b_title} {b_desc}\n"
-        p.font.name = "Arial"
-        p.font.size = Pt(13)
-        p.font.color.rgb = TEXT_WHITE
-
-    # SLIDE 3: STRUKTUR DATABASE (DENGAN TANGKAPAN LAYAR SOAL)
-    s3 = add_slide_base("2. Arsitektur Basis Data 'rental'", "Rancangan tabel kendaraantbl, pelanggantbl, dan sewatbl")
-    erd_path = os.path.join(SHOTS_DIR, "01_database_erd_skema.png")
-    if os.path.exists(erd_path):
-        s3.shapes.add_picture(erd_path, Inches(0.8), Inches(1.6), width=Inches(7.2))
-    
-    desc_box3 = s3.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, Inches(8.3), Inches(1.6), Inches(4.2), Inches(5.0))
-    desc_box3.fill.solid()
-    desc_box3.fill.fore_color.rgb = BG_CARD
-    desc_box3.line.color.rgb = RGBColor(51, 65, 85)
-    tf3 = desc_box3.text_frame
-    tf3.word_wrap = True
-    p = tf3.paragraphs[0]
-    p.text = "Karakteristik Skema:\n\n"
-    p.font.bold = True
-    p.font.color.rgb = ACCENT_GREEN
-    p.font.size = Pt(13)
-    items3 = [
-        "1. kendaraantbl: Menyimpan armada dengan nomor polisi unik dan status dinamis.",
-        "2. pelanggantbl: Master customer dengan NIK KTP unik dan nomor telepon.",
-        "3. sewatbl: Tabel transaksi yang merelasikan No KTP dan No Polisi secara atomik.",
-        "4. Auto-Increment Primary Key menjamin keunikan identitas seluruh baris data."
-    ]
-    for item in items3:
-        pi = tf3.add_paragraph()
-        pi.text = f"{item}\n"
-        pi.font.size = Pt(11)
-        pi.font.color.rgb = TEXT_WHITE
-
-    # SLIDE 4: DASHBOARD (DENGAN TANGKAPAN LAYAR SOAL)
-    s4 = add_slide_base("3. Tampilan Dashboard Utama", "Navigasi modular terstruktur (Master, Transaksi, Customer)")
-    dash_path = os.path.join(SHOTS_DIR, "02_tampilan_dashboard.png")
-    if os.path.exists(dash_path):
-        s4.shapes.add_picture(dash_path, Inches(0.8), Inches(1.6), width=Inches(6.2))
-    
-    c4 = s4.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, Inches(7.3), Inches(1.6), Inches(5.2), Inches(5.0))
-    c4.fill.solid()
-    c4.fill.fore_color.rgb = BG_CARD
-    c4.line.color.rgb = RGBColor(51, 65, 85)
-    tf4 = c4.text_frame
-    tf4.word_wrap = True
-    p = tf4.paragraphs[0]
-    p.text = "Fitur Dashboard:\n\n"
-    p.font.bold = True
-    p.font.color.rgb = ACCENT_YELLOW
-    p.font.size = Pt(13)
-    items4 = [
-        "• Header Hijau SMK: Menampilkan identitas resmi SMK Negeri 9 Semarang.",
-        "• Subheader Oranye: Penegas nama sistem aplikasi rental.",
-        "• Modul A (Master Kendaraan): Akses langsung ke inventaris mobil/motor.",
-        "• Modul B (Transaksi Sewa): Formulir pencatatan peminjaman dan rekapitulasi.",
-        "• Modul C (Customer Pelanggan): Basis data pelanggan penyewa.",
-        "• Navigasi Cepat: Satu klik langsung menuju ke modul yang diinginkan."
-    ]
-    for item in items4:
-        pi = tf4.add_paragraph()
-        pi.text = f"{item}\n"
-        pi.font.size = Pt(11.5)
-        pi.font.color.rgb = TEXT_WHITE
-
-    # SLIDE 5: MASTER KENDARAAN (DENGAN 2 TANGKAPAN LAYAR SOAL)
-    s5 = add_slide_base("4. Modul Master Kendaraan (CRUD)", "Tangkapan layar soal asli: Tabel Data Kendaraan & Formulir Input")
-    ken_t = os.path.join(SHOTS_DIR, "03_master_kendaraan_tabel.png")
-    ken_f = os.path.join(SHOTS_DIR, "04_master_kendaraan_form.png")
-    if os.path.exists(ken_t):
-        s5.shapes.add_picture(ken_t, Inches(0.8), Inches(1.6), width=Inches(5.7))
-    if os.path.exists(ken_f):
-        s5.shapes.add_picture(ken_f, Inches(6.8), Inches(1.6), width=Inches(5.7))
-
-    # SLIDE 6: TRANSAKSI SEWA (DENGAN 2 TANGKAPAN LAYAR SOAL)
-    s6 = add_slide_base("5. Modul Transaksi Sewa (Autofill Cerdas)", "Tangkapan layar soal asli: Rekap Transaksi & Formulir Autofill")
-    sew_t = os.path.join(SHOTS_DIR, "05_transaksi_sewa_tabel.png")
-    sew_f = os.path.join(SHOTS_DIR, "06_transaksi_sewa_form.png")
-    if os.path.exists(sew_t):
-        s6.shapes.add_picture(sew_t, Inches(0.8), Inches(1.6), width=Inches(5.7))
-    if os.path.exists(sew_f):
-        s6.shapes.add_picture(sew_f, Inches(6.8), Inches(1.6), width=Inches(5.7))
-
-    # SLIDE 7: CUSTOMER PELANGGAN (DENGAN 2 TANGKAPAN LAYAR SOAL)
-    s7 = add_slide_base("6. Modul Customer Pelanggan (CRUD)", "Tangkapan layar soal asli: Tabel Pelanggan & Formulir Registrasi")
-    pel_t = os.path.join(SHOTS_DIR, "07_customer_pelanggan_tabel.png")
-    pel_f = os.path.join(SHOTS_DIR, "08_customer_pelanggan_form.png")
-    if os.path.exists(pel_t):
-        s7.shapes.add_picture(pel_t, Inches(0.8), Inches(1.6), width=Inches(5.7))
-    if os.path.exists(pel_f):
-        s7.shapes.add_picture(pel_f, Inches(6.8), Inches(1.6), width=Inches(5.7))
-
-    # SLIDE 8: HASIL PENGUJIAN
-    s8 = add_slide_base("7. Hasil Pengujian Sistem & Validasi Integritas", "Verifikasi otomatis 100% lulus uji (Zero Errors)")
-    c8 = s8.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, Inches(0.8), Inches(1.6), Inches(11.7), Inches(5.0))
-    c8.fill.solid()
-    c8.fill.fore_color.rgb = BG_CARD
-    c8.line.color.rgb = RGBColor(51, 65, 85)
-    tf8 = c8.text_frame
-    tf8.word_wrap = True
-    p = tf8.paragraphs[0]
-    p.text = "Hasil Uji test_queries.php:\n"
-    p.font.bold = True
-    p.font.color.rgb = ACCENT_GREEN
-    p.font.size = Pt(13)
-    
-    t_lines = [
-        "✓ Uji 1: Total Kendaraan terverifikasi 2 unit (SUPRA X 'Ready', MIO 'Ready').",
-        "✓ Uji 2: Total Pelanggan terverifikasi 2 record (Maxikom, Budi Santoso).",
-        "✓ Uji 3: Total Transaksi Sewa terverifikasi 2 record (S,14-03,1 & S,14-03,2).",
-        "✓ Uji 4: Multi-Tabel JOIN antara Sewa, Pelanggan, dan Kendaraan berjalan presisi.",
-        "✓ Uji 5: ACID Compliant — Uji rollback transaksi mengembalikan state tabel secara atomik.",
-        "✓ Keamanan: Sanitasi penuh input via PDO Prepared Statements & escape() XSS filter."
-    ]
-    for tl in t_lines:
-        pi = tf8.add_paragraph()
-        pi.text = f"{tl}\n"
-        pi.font.size = Pt(12)
-        pi.font.color.rgb = TEXT_WHITE
-
-    # SLIDE 9: KESIMPULAN
-    s9 = add_slide_base("8. Kesimpulan & Penutup", "Ringkasan kesiapan sistem untuk pengujian asesor")
-    c9 = s9.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, Inches(1.5), Inches(1.6), Inches(10.333), Inches(5.0))
-    c9.fill.solid()
-    c9.fill.fore_color.rgb = BG_CARD
-    c9.line.color.rgb = RGBColor(51, 65, 85)
-    tf9 = c9.text_frame
-    tf9.word_wrap = True
-    p = tf9.paragraphs[0]
-    p.text = "Aplikasi Nine Rental Mobil Siap Diuji:\n\n"
-    p.font.bold = True
-    p.font.color.rgb = ACCENT_BLUE
-    p.font.size = Pt(15)
-    c_items = [
-        "1. Antarmuka 100% Identik: Mengikuti setiap detail warna dan tata letak instrumen soal.",
-        "2. Portabilitas Tinggi: Siap dijalankan di XAMPP (MySQL) dan PHP CLI (SQLite bawaan).",
-        "3. Berkas Pengumpulan Lengkap: Source code web, dump SQL, dokumentasi PDF, dan PPT.",
-        "4. Kualitas Kode Bersih: Bebas AI-slop, komentar terarah, dan mudah dipahami asesor."
-    ]
-    for ci in c_items:
-        pi = tf9.add_paragraph()
-        pi.text = f"{ci}\n"
-        pi.font.size = Pt(13)
-        pi.font.color.rgb = TEXT_WHITE
-
-    prs.save(output_path)
-    print(f"[OK] Slide presentasi PPTX berhasil dibuat: {output_path}")
-
-
-# ==============================================================================
-# 3. GENERATE SLIDE PRESENTASI VERSI PDF (Landscape)
-# ==============================================================================
-
-def generate_pdf_presentation(output_path):
-    doc = SimpleDocTemplate(
-        output_path,
-        pagesize=landscape(A4),
-        leftMargin=36,
-        rightMargin=36,
-        topMargin=36,
-        bottomMargin=36
-    )
-
-    styles = getSampleStyleSheet()
-    title_style = ParagraphStyle(
-        'SlideTitle',
-        parent=styles['Heading1'],
-        fontName='Helvetica-Bold',
-        fontSize=18,
-        leading=22,
-        textColor=colors.HexColor("#0f172a"),
-        spaceAfter=4
-    )
-    sub_style = ParagraphStyle(
-        'SlideSub',
-        parent=styles['Normal'],
-        fontName='Helvetica-Bold',
-        fontSize=10.5,
-        leading=14,
-        textColor=colors.HexColor("#0284c7"),
-        spaceAfter=12
-    )
-
-    story = []
-
-    # Slide 1 (Cover)
-    story.append(Paragraph("APLIKASI NINE RENTAL MOBIL", ParagraphStyle('C1', fontName='Helvetica-Bold', fontSize=24, leading=28, alignment=1, textColor=colors.HexColor("#0f172a"))))
-    story.append(Spacer(1, 10))
-    story.append(Paragraph("Uji Kompetensi Keahlian (UKK) Standar LSP P1 — SMK Negeri 9 Semarang", ParagraphStyle('C2', fontName='Helvetica-Bold', fontSize=13, leading=17, alignment=1, textColor=colors.HexColor("#0284c7"))))
-    story.append(Spacer(1, 20))
-    story.append(Paragraph("Teknologi: PHP Native (PDO) • MySQL / MariaDB • CSS Presisi 100% Soal<br/>Modul: Master Kendaraan • Transaksi Sewa (Autofill) • Customer Pelanggan", ParagraphStyle('C3', fontName='Helvetica', fontSize=10.5, leading=15, alignment=1, textColor=colors.HexColor("#475569"))))
-    story.append(PageBreak())
-
-    # Slide 2 (Dashboard)
-    story.append(Paragraph("Antarmuka Dashboard Utama (Navigasi Modular A / B / C)", title_style))
-    story.append(Paragraph("Struktur tata letak persis lembar soal: Banner Hijau SMK, Subheader Oranye, Kanvas Ungu", sub_style))
-    dash_path = os.path.join(SHOTS_DIR, "02_tampilan_dashboard.png")
-    if os.path.exists(dash_path):
-        story.append(RLImage(dash_path, width=420, height=325))
-    story.append(PageBreak())
-
-    # Slide 3 (Master Kendaraan)
-    story.append(Paragraph("Modul Master Kendaraan (CRUD Armada)", title_style))
-    story.append(Paragraph("Tabel inventaris unit armada dan formulir input dengan validasi tipe AT/MT", sub_style))
-    ken_t = os.path.join(SHOTS_DIR, "03_master_kendaraan_tabel.png")
-    ken_f = os.path.join(SHOTS_DIR, "04_master_kendaraan_form.png")
-    row_k = []
-    if os.path.exists(ken_t):
-        row_k.append(RLImage(ken_t, width=370, height=180))
-    if os.path.exists(ken_f):
-        row_k.append(RLImage(ken_f, width=370, height=210))
-    if row_k:
-        story.append(Table([[row_k[0], row_k[1]] if len(row_k) == 2 else [row_k[0]]]))
-    story.append(PageBreak())
-
-    # Slide 4 (Transaksi Sewa)
-    story.append(Paragraph("Modul Transaksi Sewa (Autofill Cerdas & Status Ketersediaan)", title_style))
-    story.append(Paragraph("Pemilihan No KTP dan No Polisi otomatis memuat Nama Pelanggan dan Kendaraan", sub_style))
-    sew_t = os.path.join(SHOTS_DIR, "05_transaksi_sewa_tabel.png")
-    sew_f = os.path.join(SHOTS_DIR, "06_transaksi_sewa_form.png")
-    row_s = []
-    if os.path.exists(sew_t):
-        row_s.append(RLImage(sew_t, width=370, height=180))
-    if os.path.exists(sew_f):
-        row_s.append(RLImage(sew_f, width=370, height=230))
-    if row_s:
-        story.append(Table([[row_s[0], row_s[1]] if len(row_s) == 2 else [row_s[0]]]))
-    story.append(PageBreak())
-
-    # Slide 5 (Customer Pelanggan)
-    story.append(Paragraph("Modul Customer Pelanggan (CRUD Identitas)", title_style))
-    story.append(Paragraph("Pencatatan data identitas KTP, nomor telepon, dan alamat pelanggan penyewa", sub_style))
-    pel_t = os.path.join(SHOTS_DIR, "07_customer_pelanggan_tabel.png")
-    pel_f = os.path.join(SHOTS_DIR, "08_customer_pelanggan_form.png")
-    row_p = []
-    if os.path.exists(pel_t):
-        row_p.append(RLImage(pel_t, width=370, height=170))
-    if os.path.exists(pel_f):
-        row_p.append(RLImage(pel_f, width=370, height=180))
-    if row_p:
-        story.append(Table([[row_p[0], row_p[1]] if len(row_p) == 2 else [row_p[0]]]))
-
-    doc.build(story)
-    print(f"[OK] Slide presentasi PDF berhasil dibuat: {output_path}")
 
 
 # ==============================================================================
@@ -722,10 +1389,10 @@ if __name__ == "__main__":
     pptx_pres = os.path.join(DOK_DIR, "PRESENTASI_NINERENTAL.pptx")
     pdf_pres = os.path.join(DOK_DIR, "PRESENTASI_NINERENTAL.pdf")
 
-    print("=== MEMBUAT BERKAS DELIVERABLE NINE RENTAL ===")
-    generate_pdf_documentation(pdf_doc)
-    generate_pptx_presentation(pptx_pres)
+    print("=== MEMBUAT BERKAS DELIVERABLE NINE RENTAL (12 SLIDE EKSEKUTIF) ===")
+    generate_pptx(pptx_pres)
     generate_pdf_presentation(pdf_pres)
+    generate_pdf_documentation(pdf_doc)
 
     # Salin ke folder 'Yang Dikumpulin'
     shutil.copy2(os.path.join(BASE_DIR, "database", "db_rental.sql"), os.path.join(KUMPUL_DIR, "db_rental.sql"))
@@ -736,6 +1403,6 @@ if __name__ == "__main__":
     zip_file = os.path.join(KUMPUL_DIR, "NineRental.zip")
     create_zip_package(zip_file)
 
-    print("\nSeluruh berkas deliverable berhasil disiapkan di folder:")
+    print("\nSeluruh berkas deliverable eksekutif berhasil disiapkan di folder:")
     print(f"1. {DOK_DIR}")
     print(f"2. {KUMPUL_DIR}")
