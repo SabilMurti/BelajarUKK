@@ -1,0 +1,436 @@
+/* ==============================================================================
+   STYLE APLIKASI NINE RENTAL MOBIL - LSP P1 SMK NEGERI 9 SEMARANG
+   ============================================================================== */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: #ffff00; /* Warna kuning terang sesuai screenshot PDF */
+    font-family: Arial, Helvetica, sans-serif;
+    color: #000;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 25px 15px;
+}
+
+/* Container utama kartu aplikasi */
+.app-container {
+    width: 920px;
+    max-width: 100%;
+    background-color: #b0b3b8; /* Latar abu-abu CRUD */
+    border: 1px solid #333;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+    overflow: hidden;
+}
+
+/* ==============================================================================
+   HEADER BANNER
+   ============================================================================== */
+
+/* Header Dashboard */
+.header-dashboard {
+    background-color: #00e600; /* Hijau cerah */
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    border-bottom: 2px solid #000;
+}
+
+.header-dashboard .logo-text {
+    font-family: "Times New Roman", Times, serif;
+    font-size: 46px;
+    font-weight: bold;
+    color: #000;
+    line-height: 1;
+}
+
+.header-dashboard .title-text {
+    font-family: "Times New Roman", Times, serif;
+    font-size: 20px;
+    font-weight: bold;
+    color: #000;
+    line-height: 1.3;
+    letter-spacing: 0.5px;
+}
+
+/* Sub-header Orange Dashboard */
+.subheader-orange {
+    background-color: #ff9900;
+    color: #000;
+    font-weight: bold;
+    font-size: 13px;
+    text-align: center;
+    padding: 5px 10px;
+    letter-spacing: 0.5px;
+    border-bottom: 1px solid #000;
+}
+
+/* Header CRUD (Master, Transaksi, Customer) */
+.header-crud {
+    background-color: #00e600;
+    padding: 14px 10px;
+    text-align: center;
+    border-bottom: 1px solid #000;
+}
+
+.header-crud h1 {
+    font-size: 20px;
+    font-weight: bold;
+    color: #000;
+    margin-bottom: 3px;
+    letter-spacing: 0.5px;
+}
+
+.header-crud h2 {
+    font-size: 15px;
+    font-weight: bold;
+    color: #000;
+    margin-bottom: 2px;
+}
+
+.header-crud p {
+    font-size: 14px;
+    font-weight: bold;
+    color: #000;
+}
+
+/* Sub-bar Abu-abu Judul Data */
+.subheader-crud {
+    background-color: #cccccc;
+    color: #000;
+    font-weight: bold;
+    font-size: 14px;
+    text-align: center;
+    padding: 6px 10px;
+    border-top: 1px solid #888;
+    border-bottom: 1px solid #888;
+    letter-spacing: 0.5px;
+}
+
+/* ==============================================================================
+   DASHBOARD BODY (GRADIENT PURPLE)
+   ============================================================================== */
+
+.dashboard-body {
+    background: linear-gradient(180deg, #59477d 0%, #7d6ba3 30%, #a696c5 65%, #ded8ea 100%);
+    padding: 35px 20px 50px 20px;
+    min-height: 320px;
+}
+
+.dashboard-menu-grid {
+    display: flex;
+    justify-content: space-around;
+    max-width: 780px;
+    margin: 0 auto;
+}
+
+.menu-column {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 30%;
+}
+
+.menu-column-title {
+    color: #ffffff;
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 12px;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.4);
+}
+
+.menu-divider-line {
+    width: 100%;
+    max-width: 780px;
+    height: 2px;
+    background-color: #ffff00;
+    margin: 0 auto 15px auto;
+}
+
+.menu-box-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #ffff00;
+    width: 100%;
+    height: 52px;
+    text-decoration: none;
+    border: 1px solid #c7b600;
+    box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+    transition: transform 0.1s ease, background-color 0.1s ease;
+}
+
+.menu-box-btn:hover {
+    background-color: #fff666;
+    transform: translateY(-1px);
+}
+
+.menu-letter {
+    font-size: 32px;
+    font-weight: bold;
+    color: #4a148c;
+    text-decoration: underline;
+    font-family: Arial, sans-serif;
+}
+
+.menu-caption {
+    color: #ffffff;
+    font-size: 15px;
+    font-weight: bold;
+    margin-top: 10px;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+}
+
+/* ==============================================================================
+   FOOTER
+   ============================================================================== */
+
+/* Footer Dashboard (Biru) */
+.footer-dashboard {
+    background-color: #0000cc;
+    color: #ffffff;
+    font-family: "Times New Roman", Times, serif;
+    font-weight: bold;
+    font-size: 14px;
+    text-align: center;
+    padding: 8px 10px;
+    letter-spacing: 0.5px;
+}
+
+/* Footer CRUD (Putih) */
+.footer-crud {
+    background-color: #ffffff;
+    color: #000000;
+    font-weight: bold;
+    font-size: 13px;
+    text-align: center;
+    padding: 7px 10px;
+    border-top: 1px solid #333;
+}
+
+/* ==============================================================================
+   CRUD CONTENT & TABLES
+   ============================================================================== */
+
+.crud-content {
+    background-color: #b0b3b8;
+    padding: 18px 22px 24px 22px;
+}
+
+/* Bar Tombol Aksi Kiri (Kembali & Tambah) */
+.action-nav-bar {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 14px;
+}
+
+.btn-nav-icon {
+    font-size: 30px;
+    font-weight: bold;
+    text-decoration: none;
+    line-height: 1;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.btn-nav-icon.back {
+    color: #0000cc; /* Biru simbol ≤ */
+}
+
+.btn-nav-icon.add {
+    color: #4a148c; /* Ungu gelap simbol ± */
+}
+
+.btn-nav-icon:hover {
+    opacity: 0.8;
+}
+
+/* Tabel CRUD Sesuai Screenshot */
+.table-responsive {
+    overflow-x: auto;
+    width: 100%;
+}
+
+.table-crud {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+    border: 1px solid #666;
+}
+
+.table-crud th {
+    background-color: #7b5297; /* Ungu header tabel */
+    color: #ffff00;            /* Teks kuning */
+    font-weight: bold;
+    text-align: center;
+    padding: 7px 5px;
+    border: 1px solid #5a3d70;
+    white-space: nowrap;
+}
+
+.table-crud td {
+    background-color: #b0b3b8; /* Latar abu-abu sel */
+    color: #ffff00;            /* Teks kuning persis screenshot */
+    font-weight: bold;
+    padding: 6px 6px;
+    border: 1px solid #94979c;
+    text-shadow: 1px 1px 1px rgba(0,0,0,0.5);
+}
+
+.table-crud td.center {
+    text-align: center;
+}
+
+.table-crud td.right {
+    text-align: right;
+}
+
+/* Tombol Aksi di Tabel (Edit & Hapus) */
+.action-link {
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+    margin: 0 3px;
+    vertical-align: middle;
+}
+
+.action-link.edit {
+    filter: drop-shadow(0 1px 1px rgba(0,0,0,0.4));
+}
+
+.action-link.delete {
+    filter: drop-shadow(0 1px 1px rgba(0,0,0,0.4));
+}
+
+/* Kotak Rekaman Putih di Bawah Tabel */
+.record-box {
+    background-color: #ffffff;
+    padding: 4px 10px;
+    margin-top: 12px;
+    border: 1px solid #777;
+    font-weight: bold;
+    font-size: 12px;
+    color: #ffff00; /* Teks kuning sesuai screenshot */
+    text-shadow: 1px 1px 1px #999;
+}
+
+/* ==============================================================================
+   FORMULIR INPUT (TAMBAH / EDIT)
+   ============================================================================== */
+
+.form-crud {
+    margin-top: 5px;
+}
+
+.form-row {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 7px;
+    font-size: 13px;
+}
+
+.form-label {
+    width: 140px;
+    font-weight: bold;
+    color: #000;
+    padding-top: 2px;
+}
+
+.form-colon {
+    width: 15px;
+    font-weight: bold;
+    color: #000;
+    padding-top: 2px;
+}
+
+.form-control-wrap {
+    flex: 1;
+}
+
+.input-text, .input-select, .input-textarea {
+    background-color: #ffffff;
+    border: 1px solid #707070;
+    padding: 3px 6px;
+    font-size: 12px;
+    color: #000;
+    outline: none;
+}
+
+.input-text:focus, .input-select:focus, .input-textarea:focus {
+    border-color: #0000cc;
+}
+
+.input-text.readonly {
+    background-color: #e9ecef;
+    color: #333;
+}
+
+.input-sm {
+    width: 120px;
+}
+
+.input-md {
+    width: 220px;
+}
+
+.input-lg {
+    width: 320px;
+}
+
+.input-textarea {
+    width: 320px;
+    height: 80px;
+    resize: vertical;
+}
+
+.form-divider {
+    border: 0;
+    border-top: 1px solid #333;
+    margin: 10px 0 12px 0;
+    width: 480px;
+}
+
+.btn-submit {
+    background: linear-gradient(180deg, #f8f8f8 0%, #dddddd 100%);
+    border: 1px solid #707070;
+    border-radius: 2px;
+    padding: 3px 18px;
+    font-size: 12px;
+    font-weight: bold;
+    color: #000;
+    cursor: pointer;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.15);
+}
+
+.btn-submit:hover {
+    background: linear-gradient(180deg, #ffffff 0%, #cecece 100%);
+}
+
+/* Pesan Notifikasi Sukses / Gagal */
+.alert-box {
+    padding: 8px 12px;
+    margin-bottom: 12px;
+    font-size: 12px;
+    font-weight: bold;
+    border: 1px solid transparent;
+}
+
+.alert-success {
+    background-color: #d4edda;
+    border-color: #c3e6cb;
+    color: #155724;
+}
+
+.alert-danger {
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+    color: #721c24;
+}

@@ -30,6 +30,17 @@ $modules = [
         'link'        => 'NineMart/',
         'status'      => 'draft',
         'icon'        => 'bi-cart-check'
+    ],
+    [
+        'id'          => 'ninerental',
+        'title'       => 'NineRental — Rental Mobil (LSP P1)',
+        'badge'       => 'Modul 3 • LSP P1 SMKN 9',
+        'badge_class' => 'bg-indigo-500/10 text-indigo-400 border border-indigo-500/30',
+        'description' => 'Aplikasi Manajemen Rental Mobil standar LSP P1 SMK Negeri 9 Semarang. Meliputi Master Kendaraan, Transaksi Sewa, dan Customer Pelanggan dengan integrasi status unit otomatis.',
+        'tech'        => ['PHP Native (PDO)', 'MySQL / MariaDB', 'Clean UI', 'ACID Transaksi'],
+        'link'        => 'NineRental/index.php',
+        'status'      => 'ready',
+        'icon'        => 'bi-car-front-fill'
     ]
 ];
 ?>
