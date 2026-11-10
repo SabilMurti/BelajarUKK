@@ -205,3 +205,4 @@ window.addEventListener('DOMContentLoaded', pilihBarang);
 </script>
 
 <?php include 'includes/footer.php'; ?>
+

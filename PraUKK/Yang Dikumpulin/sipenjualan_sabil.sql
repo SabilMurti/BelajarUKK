@@ -61,3 +61,4 @@ INSERT INTO `transaksi` (`kode_transaksi`, `kode_brg`, `nama_brg`, `harga`, `jum
 ('TRX0001', 'BRG001', 'Keyboard Mechanical RGB', 450000, 2, 900000, '2026-11-08'),
 ('TRX0002', 'BRG002', 'Mouse Wireless Ergonomic', 250000, 1, 250000, '2026-11-09'),
 ('TRX0003', 'BRG004', 'Flashdisk 64GB USB 3.0', 85000, 3, 255000, '2026-11-10');
+

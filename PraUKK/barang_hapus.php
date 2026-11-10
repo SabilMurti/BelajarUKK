@@ -35,3 +35,4 @@ try {
 
 header('Location: barang.php');
 exit;
+

@@ -110,3 +110,4 @@ for f in sorted(os.listdir(KUMPUL_DIR)):
     st = os.stat(fp)
     mod_str = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(st.st_mtime))
     print(f"  {f:35} | {st.st_size:10} bytes | {mod_str}")
+
