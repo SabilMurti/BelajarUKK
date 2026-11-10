@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Dokumentasi Teknis Pra-UKK RPL - Sistem Penjualan Online</title>
+<style>
+  @page {
+    size: A4 portrait;
+    margin: 20mm 18mm 20mm 18mm;
+    @bottom-right {
+      content: counter(page);
+    }
+  }
+  * {
+    box-sizing: border-box;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+  body {
+    font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif;
+    color: #1e293b;
+    line-height: 1.55;
+    font-size: 10.5pt;
+    margin: 0;
+    padding: 0;
+  }
+  .page-break {
+    page-break-before: always;
+  }
+  .cover {
+    text-align: center;
+    padding-top: 40px;
+    padding-bottom: 30px;
+    border-bottom: 2px solid #e2e8f0;
+    margin-bottom: 30px;
+  }
+  .badge {
+    display: inline-block;
+    padding: 6px 16px;
+    background: #f0f9ff;
+    color: #0284c7;
+    border: 1px solid #bae6fd;
+    border-radius: 9999px;
+    font-size: 9.5pt;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  h1.main-title {
+    font-size: 24pt;
+    font-weight: 800;
+    color: #0f172a;
+    margin: 0 0 10px 0;
+    line-height: 1.2;
+  }
+  p.main-subtitle {
+    font-size: 12pt;
+    color: #64748b;
+    margin: 0 0 24px 0;
+  }
+  .meta-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    max-width: 650px;
+    margin: 0 auto;
+    text-align: left;
+  }
+  .meta-card {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 10px 14px;
+  }
+  .meta-card .label {
+    font-size: 8.5pt;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #64748b;
+  }
+  .meta-card .val {
+    font-size: 10pt;
+    font-weight: 600;
+    color: #0f172a;
+  }
+  h2.section-title {
+    font-size: 15pt;
+    color: #0284c7;
+    border-bottom: 1.5px solid #e2e8f0;
+    padding-bottom: 6px;
+    margin-top: 26px;
+    margin-bottom: 12px;
+    page-break-after: avoid;
+  }
+  h3.subsection-title {
+    font-size: 12pt;
+    color: #0f172a;
+    margin-top: 18px;
+    margin-bottom: 8px;
+    page-break-after: avoid;
+  }
+  table.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0 16px 0;
+    font-size: 9pt;
+    page-break-inside: avoid;
+  }
+  table.data-table th {
+    background: #0f172a;
+    color: #ffffff;
+    font-weight: 600;
+    text-align: left;
+    padding: 8px 10px;
+    border: 1px solid #0f172a;
+  }
+  table.data-table td {
+    padding: 7px 10px;
+    border: 1px solid #e2e8f0;
+  }
+  table.data-table tr:nth-child(even) td {
+    background: #f8fafc;
+  }
+  .badge-pass {
+    color: #16a34a;
+    font-weight: 700;
+  }
+  .img-container {
+    text-align: center;
+    margin: 14px 0;
+    page-break-inside: avoid;
+  }
+  .img-container img {
+    max-width: 95%;
+    height: auto;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  }
+  .img-caption {
+    font-size: 8.5pt;
+    color: #64748b;
+    font-style: italic;
+    margin-top: 6px;
+  }
+  pre.code-block {
+    background: #0f172a;
+    color: #f1f5f9;
+    padding: 12px;
+    border-radius: 6px;
+    font-family: 'Consolas', 'Fira Code', monospace;
+    font-size: 8.5pt;
+    line-height: 1.4;
+    overflow-x: auto;
+    page-break-inside: avoid;
+  }
+  ul, ol {
+    margin-top: 6px;
+    margin-bottom: 12px;
+    padding-left: 20px;
+  }
+  li {
+    margin-bottom: 4px;
+  }
+</style>
+</head>
+<body>
+
+<!-- COVER PAGE -->
+<div class="cover">
+  <div class="badge">Pra Uji Kompetensi Keahlian (Pra-UKK) RPL 2026</div>
+  <h1 class="main-title">SISTEM PENJUALAN ONLINE</h1>
+  <p class="main-subtitle">Laporan Dokumentasi Teknis, Arsitektur Basis Data, & Pengujian Transaksi Atomik</p>
+  
+  <div class="meta-grid">
+    <div class="meta-card">
+      <div class="label">Identitas Peserta</div>
+      <div class="val">Sabil Murti</div>
+    </div>
+    <div class="meta-card">
+      <div class="label">Konsentrasi Keahlian</div>
+      <div class="val">Rekayasa Perangkat Lunak (RPL)</div>
+    </div>
+    <div class="meta-card">
+      <div class="label">Sekolah & Kelas</div>
+      <div class="val">SMK Negeri — Kelas XII</div>
+    </div>
+    <div class="meta-card">
+      <div class="label">Alokasi Waktu Uji</div>
+      <div class="val">480 Menit (8 Jam Pelaksanaan)</div>
+    </div>
+  </div>
+</div>
+
+<!-- BAB 1 -->
+<h2 class="section-title">1. Gambaran Umum Sistem</h2>
+<p>
+  Sistem Penjualan Online adalah aplikasi pengelolaan inventaris barang dan pencatatan transaksi penjualan yang dirancang khusus untuk memenuhi standar penilaian Pra Uji Kompetensi Keahlian (Pra-UKK) SMK Rekayasa Perangkat Lunak. Sistem ini mengadopsi pendekatan arsitektur <strong>PHP Native</strong> terstruktur dengan koneksi <strong>PDO (PHP Data Objects)</strong> dan basis data MariaDB/MySQL.
+</p>
+<p>
+  Aplikasi dibangun secara mandiri tanpa menggunakan framework eksternal yang rumit sehingga seluruh alur data, validasi, dan transaksi berada di bawah kendali penuh peserta didik dan dapat dengan mudah ditulis ulang saat pelaksanaan ujian praktik di laboratorium sekolah.
+</p>
+
+<h3 class="subsection-title">1.1 Spesifikasi Lingkungan Pengembangan</h3>
+<table class="data-table">
+  <tr>
+    <th style="width: 30%;">Komponen</th>
+    <th>Spesifikasi Implementasi</th>
+  </tr>
+  <tr>
+    <td><strong>Bahasa Pemrograman</strong></td>
+    <td>PHP 8.0+ (PHP Native, PDO Extension, Strict Server-Side Validation)</td>
+  </tr>
+  <tr>
+    <td><strong>Basis Data</strong></td>
+    <td>MariaDB 10.4+ / MySQL 8.0 (Nama Database: <code>sipenjualan_sabil</code>)</td>
+  </tr>
+  <tr>
+    <td><strong>Desain Antarmuka (UI)</strong></td>
+    <td>Pure CSS Modern (Desain Bersih Slate/Sky, Tata Letak Grid/Flexbox, Zero-Slop)</td>
+  </tr>
+  <tr>
+    <td><strong>Logika Transaksi</strong></td>
+    <td>Atomic Stock Sync (Otomasi Subtotal, Pemotongan Stok, Rekonsiliasi & Rollback)</td>
+  </tr>
+  <tr>
+    <td><strong>Keamanan Data</strong></td>
+    <td>PDO Prepared Statements (Anti SQL Injection) & htmlspecialchars (Anti XSS)</td>
+  </tr>
+</table>
+
+<h3 class="subsection-title">1.2 Struktur Direktori Proyek</h3>
+<pre class="code-block">PraUKK/
+├── assets/
+│   └── css/style.css            # Sistem desain antarmuka murni
+├── config/
+│   └── database.php             # Koneksi PDO terpusat
+├── database/
+│   └── sipenjualan_sabil.sql    # Skrip skema DDL & data awal
+├── dokumen/                     # Dokumentasi teknis, presentasi, & screenshots
+├── includes/
+│   ├── header.php               # Navigasi atas global
+│   └── footer.php               # Penutup halaman global
+├── index.php                    # Dashboard metrik & ringkasan bisnis
+├── barang.php                   # Katalog inventaris master barang
+├── barang_tambah.php            # Form input barang baru
+├── barang_edit.php              # Form pembaruan data barang
+├── barang_hapus.php             # Hapus barang terproteksi FK
+├── transaksi.php                # Riwayat transaksi penjualan
+├── transaksi_tambah.php         # Transaksi baru & pemotongan stok otomatis
+├── transaksi_edit.php           # Edit transaksi & rekonsiliasi kuantitas stok
+├── transaksi_hapus.php          # Pembatalan transaksi & rollback stok
+└── test_queries.php             # Skrip otomasi uji fungsional sistem</pre>
+
+<!-- BAB 2 -->
+<div class="page-break"></div>
+<h2 class="section-title">2. Perancangan Basis Data (sipenjualan_sabil)</h2>
+<p>
+  Sesuai spesifikasi Paket I Soal Pra-UKK, basis data diberi nama <code>sipenjualan_sabil</code> dengan 2 entitas relasional: tabel master <code>barang</code> dan tabel transaksi <code>transaksi</code>.
+</p>
+
+<h3 class="subsection-title">2.1 Struktur Tabel Master 'barang'</h3>
+<table class="data-table">
+  <tr>
+    <th>Field</th>
+    <th>Type</th>
+    <th>Null</th>
+    <th>Key</th>
+    <th>Default</th>
+    <th>Keterangan</th>
+  </tr>
+  <tr>
+    <td><strong>kode_brg</strong></td>
+    <td>VARCHAR(6)</td>
+    <td>NO</td>
+    <td>PRI</td>
+    <td>NULL</td>
+    <td>Kode unik barang (Primary Key, cth: BRG001)</td>
+  </tr>
+  <tr>
+    <td><strong>nama_brg</strong></td>
+    <td>VARCHAR(100)</td>
+    <td>NO</td>
+    <td></td>
+    <td>NULL</td>
+    <td>Nama lengkap barang dagangan</td>
+  </tr>
+  <tr>
+    <td><strong>merk</strong></td>
+    <td>VARCHAR(30)</td>
+    <td>NO</td>
+    <td></td>
+    <td>NULL</td>
+    <td>Merek / brand produsen</td>
+  </tr>
+  <tr>
+    <td><strong>harga</strong></td>
+    <td>BIGINT(10)</td>
+    <td>NO</td>
+    <td></td>
+    <td>NULL</td>
+    <td>Harga jual satuan (Rupiah)</td>
+  </tr>
+  <tr>
+    <td><strong>jumlah</strong></td>
+    <td>INT(4)</td>
+    <td>NO</td>
+    <td></td>
+    <td>0</td>
+    <td>Kuantitas stok barang yang tersedia</td>
+  </tr>
+</table>
+
+<h3 class="subsection-title">2.2 Struktur Tabel 'transaksi'</h3>
+<table class="data-table">
+  <tr>
+    <th>Field</th>
+    <th>Type</th>
+    <th>Null</th>
+    <th>Key</th>
+    <th>Default</th>
+    <th>Keterangan</th>
+  </tr>
+  <tr>
+    <td><strong>kode_transaksi</strong></td>
+    <td>VARCHAR(10)</td>
+    <td>NO</td>
+    <td>PRI</td>
+    <td>NULL</td>
+    <td>Nomor unik transaksi (Primary Key, cth: TRX001)</td>
+  </tr>
+  <tr>
+    <td><strong>kode_brg</strong></td>
+    <td>VARCHAR(6)</td>
+    <td>NO</td>
+    <td>MUL</td>
+    <td>NULL</td>
+    <td>Kunci tamu (Foreign Key) ke barang.kode_brg</td>
+  </tr>
+  <tr>
+    <td><strong>nama_brg</strong></td>
+    <td>VARCHAR(60)</td>
+    <td>NO</td>
+    <td></td>
+    <td>NULL</td>
+    <td>Nama barang saat transaksi terjadi</td>
+  </tr>
+  <tr>
+    <td><strong>harga</strong></td>
+    <td>BIGINT(10)</td>
+    <td>NO</td>
+    <td></td>
+    <td>NULL</td>
+    <td>Harga satuan saat transaksi terjadi</td>
+  </tr>
+  <tr>
+    <td><strong>jumlah</strong></td>
+    <td>INT(4)</td>
+    <td>NO</td>
+    <td></td>
+    <td>NULL</td>
+    <td>Kuantitas unit barang yang terjual</td>
+  </tr>
+  <tr>
+    <td><strong>total_bayar</strong></td>
+    <td>BIGINT(10)</td>
+    <td>NO</td>
+    <td></td>
+    <td>NULL</td>
+    <td>Subtotal pembayaran (harga * jumlah)</td>
+  </tr>
+  <tr>
+    <td><strong>tanggal</strong></td>
+    <td>DATE</td>
+    <td>NO</td>
+    <td></td>
+    <td>NULL</td>
+    <td>Tanggal pelaksanaan transaksi</td>
+  </tr>
+</table>
+
+<h3 class="subsection-title">2.3 Integritas Referensial & Tangkapan Layar Basis Data</h3>
+<p>
+  Relasi foreign key didefinisikan dengan klausa <code>ON DELETE RESTRICT ON UPDATE CASCADE</code> untuk menjamin riwayat transaksi penjualan tidak terputus bila barang hendak dihapus secara sengaja maupun tidak sengaja.
+</p>
+<div class="img-container">
+  <img src="screenshots/01_mysql_database_dan_tabel.png" alt="Struktur Basis Data">
+  <div class="img-caption">Gambar 2.1: Struktur Kolom Basis Data MariaDB CLI (01_mysql_database_dan_tabel.png)</div>
+</div>
+
+<!-- BAB 3 -->
+<div class="page-break"></div>
+<h2 class="section-title">3. Implementasi Antarmuka & Modul Aplikasi (Paket II)</h2>
+
+<h3 class="subsection-title">3.1 Modul Dashboard Utama (index.php)</h3>
+<p>
+  Dashboard menampilkan ringkasan 4 kartu metrik utama secara real-time: Total Varian Barang, Total Transaksi, Akumulasi Omset, serta deteksi stok menipis (sisa &le; 5 unit) yang memicu banner peringatan otomatis.
+</p>
+<div class="img-container">
+  <img src="screenshots/02_dashboard_utama.png" alt="Dashboard Utama">
+  <div class="img-caption">Gambar 3.1: Antarmuka Dashboard Utama (02_dashboard_utama.png)</div>
+</div>
+
+<h3 class="subsection-title">3.2 Modul Master Barang (barang.php)</h3>
+<p>
+  Tabel inventaris menyajikan seluruh stok barang dengan penomoran urut otomatis, badge visual ketersediaan (Aman / Menipis), dan pemformatan rupiah berstandar Indonesia.
+</p>
+<div class="img-container">
+  <img src="screenshots/03_barang_index.png" alt="Katalog Barang">
+  <div class="img-caption">Gambar 3.2: Katalog Inventaris Barang (03_barang_index.png)</div>
+</div>
+
+<div class="page-break"></div>
+<h3 class="subsection-title">3.3 Formulir Tambah & Edit Data Barang</h3>
+<p>
+  Formulir tambah mengonversi input kode barang menjadi huruf kapital secara otomatis serta memvalidasi keunikan kode. Formulir edit mengunci kolom Primary Key menjadi readonly agar relasi basis data tetap terjaga.
+</p>
+<div class="img-container">
+  <img src="screenshots/04_barang_tambah.png" alt="Form Tambah Barang">
+  <div class="img-caption">Gambar 3.3: Formulir Tambah Barang (04_barang_tambah.png)</div>
+</div>
+<div class="img-container">
+  <img src="screenshots/05_barang_edit.png" alt="Form Edit Barang">
+  <div class="img-caption">Gambar 3.4: Formulir Edit Barang (05_barang_edit.png)</div>
+</div>
+
+<div class="page-break"></div>
+<h3 class="subsection-title">3.4 Modul Riwayat Transaksi Penjualan (transaksi.php)</h3>
+<p>
+  Riwayat transaksi disajikan secara kronologis terurut waktu terbaru lengkap dengan informasi tanggal, barang, kuantitas, harga, dan total pembayaran.
+</p>
+<div class="img-container">
+  <img src="screenshots/06_transaksi_index.png" alt="Riwayat Transaksi">
+  <div class="img-caption">Gambar 3.5: Riwayat Transaksi Penjualan (06_transaksi_index.png)</div>
+</div>
+
+<h3 class="subsection-title">3.5 Formulir Tambah & Edit Transaksi</h3>
+<p>
+  Memilih barang pada dropdown otomatis mengisi harga satuan dan menetapkan batas maksimal kuantitas pembelian. Nilai total bayar terkalkulasi secara instan pada layar dan stok barang di gudang langsung dipotong saat transaksi disimpan.
+</p>
+<div class="img-container">
+  <img src="screenshots/07_transaksi_tambah.png" alt="Form Tambah Transaksi">
+  <div class="img-caption">Gambar 3.6: Formulir Input Transaksi Penjualan (07_transaksi_tambah.png)</div>
+</div>
+<div class="img-container">
+  <img src="screenshots/08_transaksi_edit.png" alt="Form Edit Transaksi">
+  <div class="img-caption">Gambar 3.7: Formulir Edit Transaksi Penjualan (08_transaksi_edit.png)</div>
+</div>
+
+<!-- BAB 4 -->
+<div class="page-break"></div>
+<h2 class="section-title">4. Logika Bisnis, Debugging & Pengujian Sistem (Paket III)</h2>
+<p>
+  Paket III membuktikan integritas sistem melalui serangkaian pengujian batas (edge cases):
+</p>
+<ul>
+  <li><strong>Otomasi Pemotongan Stok:</strong> Kuantitas stok master berkurang secara tepat sesuai jumlah barang yang terjual.</li>
+  <li><strong>Rekonsiliasi Kuantitas (Edit):</strong> Menghitung selisih kuantitas baru vs lama sehingga stok bertambah atau berkurang secara proporsional.</li>
+  <li><strong>Rollback Stok (Hapus):</strong> Membatalkan transaksi secara aman dengan mengembalikan stok barang ke master.</li>
+  <li><strong>Proteksi Foreign Key:</strong> Mencegah penghapusan barang yang telah memiliki riwayat transaksi tanpa menimbulkan crash sistem.</li>
+</ul>
+
+<h3 class="subsection-title">4.1 Tangkapan Layar Pengujian Debugging CLI</h3>
+<div class="img-container">
+  <img src="screenshots/09_pengujian_debugging_stok.png" alt="Debugging Output">
+  <div class="img-caption">Gambar 4.1: Hasil Eksekusi Uji Fungsional & Debugging Mandiri (09_pengujian_debugging_stok.png)</div>
+</div>
+
+<h3 class="subsection-title">4.2 Matriks Verifikasi Seluruh Paket</h3>
+<table class="data-table">
+  <tr>
+    <th style="width: 5%;">No</th>
+    <th style="width: 18%;">Paket Uji</th>
+    <th>Skenario Pengujian</th>
+    <th>Hasil yang Diharapkan</th>
+    <th style="width: 15%;">Status</th>
+  </tr>
+  <tr>
+    <td style="text-align: center;">1</td>
+    <td>Paket I</td>
+    <td>Koneksi PDO ke basis data</td>
+    <td>Koneksi berhasil dan skema terbaca utuh</td>
+    <td class="badge-pass">LULUS (100%)</td>
+  </tr>
+  <tr>
+    <td style="text-align: center;">2</td>
+    <td>Paket I</td>
+    <td>Struktur tabel barang & transaksi</td>
+    <td>Struktur kolom dan relasi FK valid</td>
+    <td class="badge-pass">LULUS (100%)</td>
+  </tr>
+  <tr>
+    <td style="text-align: center;">3</td>
+    <td>Paket II</td>
+    <td>Input barang baru dengan kode unik</td>
+    <td>Tersimpan dan kode terformat kapital</td>
+    <td class="badge-pass">LULUS (100%)</td>
+  </tr>
+  <tr>
+    <td style="text-align: center;">4</td>
+    <td>Paket II</td>
+    <td>Validasi duplikasi kode barang</td>
+    <td>Ditolak dengan pesan validasi jelas</td>
+    <td class="badge-pass">LULUS (100%)</td>
+  </tr>
+  <tr>
+    <td style="text-align: center;">5</td>
+    <td>Paket II</td>
+    <td>Kalkulasi total bayar transaksi</td>
+    <td>total_bayar = harga * jumlah tepat</td>
+    <td class="badge-pass">LULUS (100%)</td>
+  </tr>
+  <tr>
+    <td style="text-align: center;">6</td>
+    <td>Paket III</td>
+    <td>Pemotongan stok transaksi baru</td>
+    <td>Stok master berkurang tepat sesuai pembelian</td>
+    <td class="badge-pass">LULUS (100%)</td>
+  </tr>
+  <tr>
+    <td style="text-align: center;">7</td>
+    <td>Paket III</td>
+    <td>Rekonsiliasi selisih stok saat edit</td>
+    <td>Stok disesuaikan proporsional</td>
+    <td class="badge-pass">LULUS (100%)</td>
+  </tr>
+  <tr>
+    <td style="text-align: center;">8</td>
+    <td>Paket III</td>
+    <td>Rollback stok saat transaksi dihapus</td>
+    <td>Stok dikembalikan utuh ke tabel master</td>
+    <td class="badge-pass">LULUS (100%)</td>
+  </tr>
+</table>
+
+<!-- BAB 5 -->
+<div class="page-break"></div>
+<h2 class="section-title">5. Kesimpulan & Penutup</h2>
+<p>
+  Berdasarkan proses pengembangan dan rangkaian pengujian yang telah dipaparkan:
+</p>
+<ol>
+  <li><strong>Pemenuhan Soal 100%:</strong> Seluruh instruksi Soal Pra-UKK Rekayasa Perangkat Lunak Paket I, II, dan III telah terpenuhi secara utuh dan terverifikasi.</li>
+  <li><strong>Desain Bersih & Mudah Dipahami:</strong> Implementasi PHP Native tanpa kerumitan framework mempermudah peserta didik dalam memahami logika data dan mempercepat proses pengetikan saat ujian praktik kejuruan berlangsung.</li>
+  <li><strong>Integritas & Stabilitas:</strong> Transaksi atomik serta proteksi relasi foreign key menjamin keakuratan inventaris barang dan keamanan data finansial.</li>
+</ol>
+<p style="margin-top: 24px; font-weight: 600; color: #0284c7;">
+  Status Akhir: Sistem Penjualan Online dinyatakan KOMPETEN dan SIAP untuk diujikan pada pelaksanaan Uji Kompetensi Keahlian (UKK).
+</p>
+
+</body>
+</html>
