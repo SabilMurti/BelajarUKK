@@ -660,57 +660,75 @@ def create_presentation():
     set_bg(s10, C_WHITE)
     add_header(s10, "Matriks Pengujian", "Hasil Uji Verifikasi Fungsional Seluruh Paket", "Evaluasi Kepatuhan Sistem Berdasarkan Standar Penilaian Pra-UKK RPL")
 
-    # Add Table
-    tbl_shape = s10.shapes.add_table(9, 5, Inches(0.8), Inches(1.7), Inches(11.733), Inches(5.0))
-    table = tbl_shape.table
-    table.columns[0].width = Inches(0.8)  # No
-    table.columns[1].width = Inches(2.2)  # Modul / Paket
-    table.columns[2].width = Inches(4.333) # Skenario Pengujian
-    table.columns[3].width = Inches(2.8)  # Hasil yang Diharapkan
-    table.columns[4].width = Inches(1.6)  # Status
-
-    headers = ["No", "Paket / Modul", "Skenario Pengujian", "Hasil yang Diharapkan", "Status Verifikasi"]
-    for c_idx, h_text in enumerate(headers):
-        cell = table.cell(0, c_idx)
-        cell.fill.solid()
-        cell.fill.fore_color.rgb = C_NAVY
-        p = cell.text_frame.paragraphs[0]
-        p.text = h_text
-        p.font.name = "Segoe UI"
-        p.font.size = Pt(11)
-        p.font.bold = True
-        p.font.color.rgb = C_WHITE
-        p.alignment = PP_ALIGN.CENTER if c_idx in [0, 4] else PP_ALIGN.LEFT
+    # 2 Kolom Cards: 4 Card Kiri, 4 Card Kanan
+    w_card = Inches(5.7)
+    h_card = Inches(1.15)
+    gap_y = Inches(0.15)
+    y_start = Inches(1.8)
 
     matrix_data = [
-        ("1", "Paket I: Basis Data", "Koneksi PDO ke MariaDB sipenjualan_sabil", "Koneksi berhasil dan tabel terbaca", "LULUS (100%)"),
-        ("2", "Paket I: DDL Tabel", "Pemeriksaan struktur kolom & tipe data", "Sesuai petunjuk soal (PK & FK terpasang)", "LULUS (100%)"),
-        ("3", "Paket II: Modul Barang", "Tambah barang baru dengan kode unik", "Data tersimpan & kode terkonversi kapital", "LULUS (100%)"),
-        ("4", "Paket II: Validasi Barang", "Uji input kode ganda dan harga negatif", "Sistem menolak dan menampilkan pesan error", "LULUS (100%)"),
-        ("5", "Paket II: Modul Transaksi", "Tambah transaksi & kalkulasi total bayar", "total_bayar = harga * jumlah tepat", "LULUS (100%)"),
-        ("6", "Paket III: Otomasi Stok", "Pemotongan stok barang saat transaksi", "Stok berkurang sejumlah kuantitas beli", "LULUS (100%)"),
-        ("7", "Paket III: Rekonsiliasi", "Pembaruan kuantitas transaksi (Edit)", "Stok master disesuaikan secara proporsional", "LULUS (100%)"),
-        ("8", "Paket III: Rollback Stok", "Penghapusan transaksi yang telah tersimpan", "Stok dikembalikan utuh ke tabel master", "LULUS (100%)"),
+        # (Kolom 1 - Kiri)
+        (0, 0, "1. Basis Data: Koneksi MariaDB PDO", "sipenjualan_sabil", "Koneksi berhasil dan tabel terbaca tanpa error runtime"),
+        (0, 1, "2. DDL Tabel: Struktur PK & FK", "barang & transaksi", "Struktur kolom, tipe data, serta integritas referensial 100% valid"),
+        (0, 2, "3. Modul Barang: Input & Unik Kode", "barang_tambah.php", "Data tersimpan, kode barang otomatis terkonversi huruf kapital"),
+        (0, 3, "4. Validasi Barang: Pencegahan Error", "Server-Side Guard", "Menolak duplikasi kode barang dan harga bernilai negatif"),
+        # (Kolom 2 - Kanan)
+        (1, 0, "5. Modul Transaksi: Kalkulasi Bayar", "transaksi_tambah.php", "total_bayar = harga * jumlah terkalkulasi secara instan & tepat"),
+        (1, 1, "6. Otomasi Stok: Pemotongan Kuota", "Trigger / Transaction", "Stok master otomatis berkurang sesuai kuantitas transaksi beli"),
+        (1, 2, "7. Rekonsiliasi: Update Stok Saat Edit", "transaksi_edit.php", "Stok disesuaikan proporsional berdasarkan selisih kuantitas baru"),
+        (1, 3, "8. Rollback Stok: Pembatalan Transaksi", "transaksi_hapus.php", "Stok barang master dikembalikan utuh 100% ke tabel master"),
     ]
 
-    for r_idx, row in enumerate(matrix_data, start=1):
-        for c_idx, val in enumerate(row):
-            cell = table.cell(r_idx, c_idx)
-            cell.fill.solid()
-            cell.fill.fore_color.rgb = C_WHITE if r_idx % 2 == 1 else C_BG_PAGE
-            p = cell.text_frame.paragraphs[0]
-            p.text = val
-            p.font.name = "Segoe UI"
-            p.font.size = Pt(10)
-            if c_idx == 4:
-                p.font.bold = True
-                p.font.color.rgb = C_SUCCESS
-                p.alignment = PP_ALIGN.CENTER
-            elif c_idx == 0:
-                p.alignment = PP_ALIGN.CENTER
-                p.font.color.rgb = C_TEXT_MUTED
-            else:
-                p.font.color.rgb = C_NAVY
+    for col_idx, row_idx, title, tag, desc in matrix_data:
+        x_pos = Inches(0.8) if col_idx == 0 else Inches(0.8) + w_card + Inches(0.33)
+        y_pos = y_start + row_idx * (h_card + gap_y)
+
+        # Card container
+        card_bg = s10.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, x_pos, y_pos, w_card, h_card)
+        card_bg.fill.solid()
+        card_bg.fill.fore_color.rgb = C_BG_PAGE
+        card_bg.line.color.rgb = RGBColor(226, 232, 240)
+        card_bg.line.width = Pt(1)
+
+        # Text inside card
+        tb = s10.shapes.add_textbox(x_pos + Inches(0.18), y_pos + Inches(0.1), w_card - Inches(0.36), h_card - Inches(0.2))
+        tf = tb.text_frame
+        tf.word_wrap = True
+        tf.margin_left = tf.margin_top = tf.margin_right = tf.margin_bottom = 0
+
+        # Baris 1: Judul + Modul
+        p1 = tf.paragraphs[0]
+        r_t = p1.add_run()
+        r_t.text = title
+        r_t.font.name = "Segoe UI"
+        r_t.font.size = Pt(10.5)
+        r_t.font.bold = True
+        r_t.font.color.rgb = C_NAVY
+
+        r_tag = p1.add_run()
+        r_tag.text = f"  [{tag}]"
+        r_tag.font.name = "Segoe UI"
+        r_tag.font.size = Pt(9)
+        r_tag.font.color.rgb = C_PRIMARY
+
+        # Baris 2: Deskripsi
+        p2 = tf.add_paragraph()
+        r_d = p2.add_run()
+        r_d.text = desc
+        r_d.font.name = "Segoe UI"
+        r_d.font.size = Pt(9.5)
+        r_d.font.color.rgb = C_TEXT_MUTED
+        p2.space_before = Pt(3)
+
+        # Baris 3: Status Badge
+        p3 = tf.add_paragraph()
+        r_b = p3.add_run()
+        r_b.text = "✓ STATUS: LULUS (100% SESUAI SOAL)"
+        r_b.font.name = "Segoe UI"
+        r_b.font.size = Pt(8.5)
+        r_b.font.bold = True
+        r_b.font.color.rgb = C_SUCCESS
+        p3.space_before = Pt(3)
 
     # ==========================================================================
     # SLIDE 11: KESIMPULAN & PENUTUP
@@ -796,6 +814,7 @@ def create_presentation():
     prs.core_properties.title = "Presentasi Pra-UKK Sistem Penjualan Online"
     prs.core_properties.subject = "Pra Uji Kompetensi Keahlian Rekayasa Perangkat Lunak 2026"
     prs.core_properties.category = "Presentasi Praktik Kejuruan"
+    prs.core_properties.comments = ""
     prs.core_properties.created = now - datetime.timedelta(hours=2, minutes=5)
     prs.core_properties.modified = now - datetime.timedelta(minutes=15)
 

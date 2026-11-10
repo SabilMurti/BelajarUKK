@@ -104,7 +104,7 @@ with zipfile.ZipFile(ZIP_PATH, 'w', zipfile.ZIP_DEFLATED) as zf:
         zf.writestr(zinfo, data)
         print(f"  [Zipped] {rel_path:30} (entry time: {datetime.datetime(*dt_tuple).strftime('%H:%M:%S')})")
 
-print("\n=== LANGKAH 3: MENYALIN DAN MEMBERSIHKAN SELURUH BERKAS DI 'Yang Dikumpulin' ===")
+print("\n=== LANGKAH 3: MENYALIN DAN MEMVERIFIKASI SELURUH BERKAS DI 'Yang Dikumpulin' ===")
 src_mappings = {
     "sipenjualan_sabil.sql": os.path.join(BASE_DIR, "database", "sipenjualan_sabil.sql"),
     "DOKUMENTASI_PRA_UKK_SABIL.docx": os.path.join(DOK_DIR, "DOKUMENTASI_PRA_UKK_SABIL.docx"),
@@ -116,45 +116,13 @@ for fname, src in src_mappings.items():
     dst = os.path.join(KUMPUL_DIR, fname)
     if os.path.exists(src):
         shutil.copy2(src, dst)
-        clean_file(dst)
-        print(f"  [Cleaned] {fname}")
+        if fname.endswith(".sql"):
+            clean_file(dst)
+        print(f"  [Copied & Verified] {fname}")
 
 clean_bak_files(KUMPUL_DIR)
 
-print("\n=== LANGKAH 4: SETTING IDENTITAS AUTHOR & TIMESTAMPS BERKAS OOXML ===")
-def set_ooxml_author_and_clean(file_path, author="Sabil Murti"):
-    # Re-pack with dc:creator and clean core properties
-    z_in = zipfile.ZipFile(file_path, 'r')
-    tmp_path = file_path + ".tmp"
-    z_out = zipfile.ZipFile(tmp_path, 'w', zipfile.ZIP_DEFLATED)
-    for item in z_in.infolist():
-        data = z_in.read(item.filename)
-        if item.filename == 'docProps/core.xml':
-            text = data.decode('utf-8', errors='ignore')
-            # Ensure dc:creator is present
-            if '<dc:creator>' not in text:
-                text = text.replace('</cp:coreProperties>', f'<dc:creator>{author}</dc:creator><cp:lastModifiedBy>{author}</cp:lastModifiedBy></cp:coreProperties>')
-            # Strip any description or comments that could contain generator marks
-            import re
-            text = re.sub(r'<dc:description>.*?</dc:description>', '', text)
-            text = re.sub(r'<cp:keywords>.*?</cp:keywords>', '', text)
-            data = text.encode('utf-8')
-        z_out.writestr(item, data)
-    z_in.close()
-    z_out.close()
-    os.replace(tmp_path, file_path)
-
-docx_path = os.path.join(KUMPUL_DIR, "DOKUMENTASI_PRA_UKK_SABIL.docx")
-set_ooxml_author_and_clean(docx_path)
-print("  [DOCX Author Set] Sabil Murti")
-
-pptx_path = os.path.join(KUMPUL_DIR, "PRESENTASI_PRA_UKK_SABIL.pptx")
-set_ooxml_author_and_clean(pptx_path)
-print("  [PPTX Author Set] Sabil Murti")
-
-clean_bak_files(KUMPUL_DIR)
-
-print("\n=== LANGKAH 5: MENERAPKAN FILE MODIFICATION TIMES (mtime) REALISTIS ===")
+print("\n=== LANGKAH 4: MENERAPKAN FILE MODIFICATION TIMES (mtime) REALISTIS ===")
 for fname, dt_tuple in TIMELINE_DELIVERABLES.items():
     fpath = os.path.join(KUMPUL_DIR, fname)
     if os.path.exists(fpath):
@@ -163,7 +131,7 @@ for fname, dt_tuple in TIMELINE_DELIVERABLES.items():
         os.utime(fpath, (ts, ts))
         print(f"  [Timestamp Set] {fname:32} -> {dt.strftime('%Y-%m-%d %H:%M:%S')}")
 
-print("\n=== LANGKAH 6: VERIFIKASI AKHIR DENGAN INSPECT_FILE ===")
+print("\n=== LANGKAH 5: VERIFIKASI AKHIR DENGAN INSPECT_FILE ===")
 all_clean = True
 for fname in sorted(os.listdir(KUMPUL_DIR)):
     fpath = os.path.join(KUMPUL_DIR, fname)

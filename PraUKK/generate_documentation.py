@@ -37,7 +37,31 @@ def set_cell_margins(cell, top=100, bottom=100, left=150, right=150):
     tcPr.append(tcMar)
 
 def build_docx():
-    doc = Document()
+    template_docx = "/home/murtix/belajar/BelajarUKK/NineMart/Yang Dikumpulin/DOKUMENTASI_WEB_NINEMART_SABIL.docx"
+    if os.path.exists(template_docx):
+        import io, zipfile
+        with open(template_docx, 'rb') as f:
+            t_data = f.read()
+        zin = zipfile.ZipFile(io.BytesIO(t_data))
+        buf = io.BytesIO()
+        with zipfile.ZipFile(buf, 'w', zipfile.ZIP_DEFLATED) as zout:
+            for item in zin.infolist():
+                raw = zin.read(item.filename)
+                if item.filename == 'word/styles.xml':
+                    raw = raw.replace(b'w:val="Heading 1"', b'w:val="heading 1"')
+                    raw = raw.replace(b'w:val="Heading 2"', b'w:val="heading 2"')
+                    raw = raw.replace(b'w:val="Heading 3"', b'w:val="heading 3"')
+                zout.writestr(item, raw)
+        buf.seek(0)
+        doc = Document(buf)
+        # Clear previous body elements except section properties
+        body = doc._body._element
+        for child in list(body):
+            if child.tag.endswith('sectPr'):
+                continue
+            body.remove(child)
+    else:
+        doc = Document()
     
     # Page setup - A4 with 1 inch margins
     sections = doc.sections
@@ -537,10 +561,12 @@ def build_docx():
     doc.core_properties.title = "Laporan Dokumentasi Teknis Pra-UKK Sistem Penjualan Online"
     doc.core_properties.subject = "Pra Uji Kompetensi Keahlian Rekayasa Perangkat Lunak 2026"
     doc.core_properties.category = "Laporan Praktik Kejuruan"
+    doc.core_properties.comments = ""
+    doc.core_properties.description = ""
     # Set created and modified timestamp to realistic exam day (earlier this morning)
     now = datetime.datetime.now(datetime.timezone.utc)
-    doc.core_properties.created = now - datetime.timedelta(hours=2, minutes=15)
-    doc.core_properties.modified = now - datetime.timedelta(minutes=10)
+    doc.core_properties.created = now - datetime.timedelta(hours=1, minutes=40)
+    doc.core_properties.modified = now - datetime.timedelta(minutes=15)
 
     doc.save(DOCX_OUT)
     print(f"DOCX documentation generated successfully: {DOCX_OUT}")

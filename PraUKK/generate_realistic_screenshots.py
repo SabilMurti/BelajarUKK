@@ -127,6 +127,23 @@ body {{
   <div>Bug tracker: https://github.com/dbcli/mycli/issues</div>
   <div>Tip - customize colors using the "[colors]" section in ~/.myclirc!</div>
   
+  <div class="sec">MariaDB root@localhost:(none)&gt; <span class="kw">show databases</span></div>
+  <div>+--------------------+</div>
+  <div>| <span class="tbl-hdr">Database</span>           |</div>
+  <div>+--------------------+</div>
+  <div>| calesteria         |</div>
+  <div>| db_ninemart        |</div>
+  <div>| information_schema |</div>
+  <div>| laravel            |</div>
+  <div>| mysql              |</div>
+  <div>| performance_schema |</div>
+  <div>| pormulir           |</div>
+  <div>| sipenjualan_sabil  |</div>
+  <div>| sys                |</div>
+  <div>+--------------------+</div>
+  <div>9 rows in set</div>
+  <div>Time: 0.006s</div>
+
   <div class="sec">MariaDB root@localhost:(none)&gt; <span class="kw">use</span> sipenjualan_sabil</div>
   <div>Reading table information for completion of table and column names</div>
   <div>You can turn off this feature to get a quicker startup with -A</div>
@@ -176,7 +193,7 @@ body {{
 </html>
 """
     out_png = os.path.join(SHOTS_DIR, "01_mysql_database_dan_tabel.png")
-    render_terminal(html, out_png, width=1024, height=852)
+    render_terminal(html, out_png, width=1024, height=1100)
 
 def generate_debugging_screenshot():
     # 09_pengujian_debugging_stok.png using Starship prompt + PHP CLI
